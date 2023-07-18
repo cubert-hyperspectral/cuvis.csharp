@@ -3,7 +3,8 @@ set(target_name cuvis_csil)
 set(SWIG_LANGUAGE csharp)
 set(CMAKE_LANGUAGE CSharp)
 
-set(SWIG_OUTPUT_DIR "${EXECUTABLE_OUTPUT_PATH}/intermediate/${target_name}")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/intermediate/${target_name}")
+set(SWIG_OUTPUT_DIR "${CMAKE_BINARY_DIR}/intermediate/${target_name}")
 
 list(APPEND CMAKE_MODULE_PATH
   "${CMAKE_CURRENT_LIST_DIR}/cuvis.swig/")
