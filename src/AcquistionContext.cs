@@ -27,7 +27,7 @@ namespace cuvis_net
         public AcquistionContext(SessionFile sess, bool simulate)
         {
             var pHandle = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_create_from_session_file(sess.handle_, simulate?1:0, pHandle))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_create_from_session_file(sess.handle_, simulate ? 1 : 0, pHandle))
             {
                 throw new SDK_Exception();
             }
@@ -605,7 +605,90 @@ namespace cuvis_net
 
         }
         #endregion
+
+
+        #region Component
+
+        public IEnumerable<Component> Components 
+        {
+            get {
+                List<Component> components = new List<Component>();
+                for (int i = 0; i < ComponentCount; i++) 
+                {
+                    components.Add(new Component(this, i));
+                }
+                return components;
+            }
+        }
+
+        #endregion
     }
 
 
+    public class Component
+    {
+        private AcquistionContext _acq;
+        private int _idx;
+        internal Component(AcquistionContext acq, int idx)
+        {
+            _acq = acq;
+            _idx = idx;
+        }
+
+        public bool Online
+        {
+            get
+            {
+                return _acq.GetOnline(_idx);
+            }
+        }
+
+        public int Temperature
+        {
+            get
+            {
+                return _acq.GetTemperature(_idx);
+            }
+        }
+
+        public int Bandwidth
+        {
+            get
+            {
+                return _acq.GetBandwidth(_idx);
+            }
+        }
+
+        public double Gain
+        {
+            get
+            {
+                return _acq.GetGain(_idx);
+            }
+            set
+            {
+                _acq.SetGain(_idx, value);
+            }
+        }
+
+        public double IntegrationTimeFactor
+        {
+            get
+            {
+                return _acq.GetIntegrationTimeFactor(_idx);
+            }
+            set
+            {
+                _acq.SetIntegrationTimeFactor(_idx, value);
+            }
+        }
+
+        public ComponentInfo Info 
+        {
+            get 
+            {
+                return _acq.GetComponentInfo(_idx);
+            }
+        }
+    }
 }

@@ -43,7 +43,22 @@ namespace cuvis_net
 
         }
 
+        public Measurement this[int index]
+        {
+            get
+            {
+                return GetMeasurement(index);
+            }
 
+        }
+
+        public int Length 
+        {
+            get 
+            {
+                return GetSize();
+            }
+        }
 
         public double FPS
         {
@@ -56,6 +71,11 @@ namespace cuvis_net
                 }
                 return cuvis_il.p_double_value(val);
             }
+        }
+
+        public string Hash
+        {
+            get { return cuvis_il.cuvis_session_file_get_hash_swig(handle_); }
         }
 
         public OperationMode OperationMode

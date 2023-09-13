@@ -270,17 +270,46 @@ namespace cuvis_net
 
     public static class CapabilityConversion
     {
-        public static IEnumerable<Capability> FromBitmap(int bitmap)
+        public static IEnumerable<Capability> FromBitset(int bitset)
         {
             List<Capability> capabilities = new List<Capability>();
             for (int i = 1; i <= 33554432; i = i * 2)
             {
-                if ((bitmap & i) != 0)
+                if ((bitset & i) != 0)
                 {
                     capabilities.Add((Capability)i);
                 }
             }
             return capabilities;
+        }
+    }
+
+    public enum MeasurementFlag 
+    {
+        Overilluminated = 1,
+        PoorReference = 2,
+        PoorWhiteBalancing = 4,
+        DarkIntTime = 8,
+        DarkTemp = 16,
+        WhiteIntTime = 32,
+        WhiteTemp = 64,
+        WhiteDarkIntTime = 128,
+        WhiteDarkTemp = 256
+    }
+
+    public static class MeasurementFlagConversion 
+    {
+        public static IEnumerable<MeasurementFlag> FromBitset(uint bitset)
+        {
+            List<MeasurementFlag> measurementFlags = new List<MeasurementFlag>();
+            for (int i = 1; i <= 256; i = i * 2)
+            {
+                if ((bitset & i) != 0)
+                {
+                    measurementFlags.Add((MeasurementFlag)i);
+                }
+            }
+            return measurementFlags;
         }
     }
 
@@ -430,6 +459,25 @@ namespace cuvis_net
 
         public double BlendOpacity { get; set; }
 
+        public static GeneralExportSettings Default
+        {
+            get
+            {
+                GeneralExportSettings args = new GeneralExportSettings();
+                args.ExportDir = ".";
+                args.ChannelSelection = "all";
+                args.SpectraMultiplier = 1.0;
+                args.PanScale = 0.0;
+                args.PanSharpeningInterpolationType = PanSharpeningInterpolationType.Linear;
+                args.PanSharpeningAlgorithmType = PanSharpeningAlgorithm.CubertMacroPixel;
+                args.AddPan = false;
+                args.AddFullscalePan = false;
+                args.Permissive = false;
+                args.BlendOpacity = 0.0;
+                return args;
+            }
+        }
+
         public GeneralExportSettings(string exportDir, string channelSelection, double spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
         {
             ExportDir = exportDir;
@@ -524,7 +572,7 @@ namespace cuvis_net
         }
     }
 
-    public struct CubertSaveArgs
+    public struct SaveArgs
     {
         public bool AllowFragmentation { get; set; }
         public bool AllowOverride { get; set; }
@@ -537,13 +585,13 @@ namespace cuvis_net
         public int HardLimit { get; set; }
         public int MaxBufTimeMilliseconds { get; set; }
 
-        public static CubertSaveArgs Default
+        public static SaveArgs Default
         {
             // C# doesn't allow parameterless constructors for structs
             // instead a static property with default values is defined
             get
             {
-                CubertSaveArgs args = new CubertSaveArgs();
+                SaveArgs args = new SaveArgs();
                 args.AllowFragmentation = false;
                 args.AllowOverride = false;
                 args.AllowDrop = false;
@@ -559,7 +607,7 @@ namespace cuvis_net
         }
 
 
-        internal CubertSaveArgs(cuvis_save_args_t sa)
+        internal SaveArgs(cuvis_save_args_t sa)
         {
             AllowFragmentation = sa.allow_fragmentation > 0;
             AllowOverride = sa.allow_overwrite > 0;
