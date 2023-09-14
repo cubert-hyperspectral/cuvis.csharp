@@ -60,3 +60,4 @@ string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 
 
 add_dependencies(${target_name}  cuvis_netstubs)
+target_link_libraries(${target_name}  cuvis_netstubs)
