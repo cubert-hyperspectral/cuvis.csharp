@@ -10,6 +10,7 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_hardware_state_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_double.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_p_q_const__char_int__void.cs
 #${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_p_q_const__wchar_t_int__void.cs
+${EXECUTABLE_OUTPUT_PATH}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_status_t.cs
 
 #${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_int_int__void.cs
 
