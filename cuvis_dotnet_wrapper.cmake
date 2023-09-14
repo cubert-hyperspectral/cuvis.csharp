@@ -48,6 +48,7 @@ set_property(TARGET ${target_name}
 	PROPERTY VS_GLOBAL_ROOTNAMESPACE ${output_name}
 	PROPERTY DOTNET_TARGET_FRAMEWORK ${net_framework_version}
 	PROPERTY VS_DOTNET_REFERENCES "System;System.Device;System.Drawing"
+	PROPERTY LINKER_LANGUAGE CSharp
 )
 
 #SET_TARGET_PROPERTIES( ${EXE_NAME} PROPERTIES VS_GLOBAL_TargetFrameworkProfile "Client" )
