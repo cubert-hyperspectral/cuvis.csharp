@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 
 # set the project name
 
-include(cuvis_netstubs)
-
 set(target_name cuvis_dotnet_wrapper)
 
 set(PROJECT_FILES
@@ -58,6 +56,7 @@ set_target_properties(${target_name} PROPERTIES FOLDER "${projprefix}/dotnet")
 string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 
+include(cuvis_netstubs)
 
 add_dependencies(${target_name}  cuvis_netstubs)
 target_link_libraries(${target_name}  cuvis_netstubs)
