@@ -89,8 +89,8 @@ target_compile_options(${target_name}
 target_compile_options(${target_name} PRIVATE /fp:precise) # /fp:strict is incompatible with /clr
 set_target_properties(${target_name}
 	PROPERTIES
-	PROPERTY VS_GLOBAL_ROOTNAMESPACE ${output_name}
-	PROPERTY LINKER_LANGUAGE CSharp
+	VS_GLOBAL_ROOTNAMESPACE ${output_name}
+	LINKER_LANGUAGE CSharp
 	#PROPERTY VS_DOTNET_REFERENCES "System"
 )
 # Note: Modification of compiler flags is required for CLR compatibility now that we are using .resx files.
