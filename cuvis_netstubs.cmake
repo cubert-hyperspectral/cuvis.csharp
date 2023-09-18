@@ -87,7 +87,8 @@ target_compile_options(${target_name}
 		#/Al
 )
 target_compile_options(${target_name} PRIVATE /fp:precise) # /fp:strict is incompatible with /clr
-set_property(TARGET ${target_name}
+set_target_properties(${target_name}
+	PROPERTIES
 	PROPERTY VS_GLOBAL_ROOTNAMESPACE ${output_name}
 	PROPERTY LINKER_LANGUAGE CSharp
 	#PROPERTY VS_DOTNET_REFERENCES "System"
