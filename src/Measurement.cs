@@ -147,7 +147,7 @@ namespace cuvis_net
             }
         }
 
-        public void Save(string path, CubertSaveArgs args)
+        public void Save(string path, SaveArgs args)
         {
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_measurement_save(handle_, path, args.GetInternal()))
             {
@@ -165,7 +165,7 @@ namespace cuvis_net
                     throw new SDK_Exception();
                 }
                 int capabilityBitmap = cuvis_il.p_int_value(pHandle);
-                return CapabilityConversion.FromBitmap(capabilityBitmap);
+                return CapabilityConversion.FromBitset(capabilityBitmap);
             }
         }
 
@@ -209,7 +209,7 @@ namespace cuvis_net
 
         public Bitmap Thumbnail { get { return preview_image_; } }
 
-        public uint MeasurementFlags { get { return metaData_.measurement_flags; } }
+        public IEnumerable<MeasurementFlag> MeasurementFlags { get { return MeasurementFlagConversion.FromBitset(metaData_.measurement_flags); } }
         public ProcessingMode ProcessingMode { get { return (ProcessingMode)metaData_.processing_mode; } }
         public SessionData Session
         {
@@ -298,7 +298,7 @@ namespace cuvis_net
             return new Measurement(newHandle);
         }
 
-        public string GetCalibrationID
+        public string CalibrationID
         {
             get { return cuvis_il.cuvis_measurement_get_calib_id_swig(handle_); }
         }

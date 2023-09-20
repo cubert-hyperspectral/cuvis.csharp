@@ -79,10 +79,10 @@ namespace cuvis_net
                 throw new SDK_Exception();
             }
             int capabilityBitmap = cuvis_il.p_int_value(pHandle);
-            return CapabilityConversion.FromBitmap(capabilityBitmap);
+            return CapabilityConversion.FromBitset(capabilityBitmap);
         }
 
-        public string GetID
+        public string ID
         {
             get { return cuvis_il.cuvis_calib_get_id_swig(handle_); }
         }

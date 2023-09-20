@@ -10,6 +10,7 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_hardware_state_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_double.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_p_q_const__char_int__void.cs
 #${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_p_q_const__wchar_t_int__void.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_status_t.cs
 
 #${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_int_int__void.cs
 
@@ -86,8 +87,10 @@ target_compile_options(${target_name}
 		#/Al
 )
 target_compile_options(${target_name} PRIVATE /fp:precise) # /fp:strict is incompatible with /clr
-set_property(TARGET ${target_name}
-	PROPERTY VS_GLOBAL_ROOTNAMESPACE ${output_name}
+set_target_properties(${target_name}
+	PROPERTIES
+	#VS_GLOBAL_ROOTNAMESPACE ${output_name}
+	LINKER_LANGUAGE CSharp
 	#PROPERTY VS_DOTNET_REFERENCES "System"
 )
 # Note: Modification of compiler flags is required for CLR compatibility now that we are using .resx files.

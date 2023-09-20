@@ -135,6 +135,7 @@ namespace cuvis_net
             cuvis_proc_args_t args = new cuvis_proc_args_t();
             args.processing_mode = (cuvis_processing_mode_t)processingMode;
             args.allow_recalib = allowRecalib ? 1 : 0;
+            
             var pHandle = cuvis_il.new_p_int();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_is_capable(handle_, mesu.handle_, args, pHandle))
             {
@@ -183,7 +184,7 @@ namespace cuvis_net
         }
 
 
-        public string GetCalibrationID
+        public string CalibrationID
         {
             get { return cuvis_il.cuvis_proc_cont_get_calib_id_swig(handle_); }
         }

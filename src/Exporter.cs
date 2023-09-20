@@ -61,7 +61,7 @@ namespace cuvis_net
 
     public class CubeExporter : Exporter
     {
-        public CubeExporter(GeneralExportSettings ge, CubertSaveArgs fs)
+        public CubeExporter(GeneralExportSettings ge, SaveArgs fs)
         {
             var pHandle = cuvis_il.new_p_int();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_exporter_create_cube(pHandle, ge.GetInternal(), fs.GetInternal()))
