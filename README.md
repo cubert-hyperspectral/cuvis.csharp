@@ -12,8 +12,7 @@ cuvis.csharp is the C# wrapper for the Cuvis SDK written in C ([available here](
 This wrapper enables operating Cubert GmbH Hyperspectral Cameras, as well as, 
 analyzing data directly from the corporate data format(s) within C#.
 This wrapper provides an object-oriented full representation of the basic C SDK 
-capabilities and python return variable formats based on commonly used modules, 
-like dictionaries, datetime or numpy objects.
+capabilities.
 
 For other supported program languages, please have a look at the 
 source code page.
