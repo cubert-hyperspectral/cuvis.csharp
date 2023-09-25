@@ -38,8 +38,8 @@ First, you need to install the Cuvis C SDK from [here](https://cloud.cubert-gmbh
 We provide an additional example repository [here](https://github.com/cubert-hyperspectral/cuvis.csharp.examples),
 covering some basic applications.
 
-Further, we provide a set of example images to explore [here](https://cloud.cubert-gmbh.de/index.php/s/3oECVGWpC1NpNqC).
-These examples are also used by the examples mentioned above.
+Further, we provide a set of example measurements to explore [here](https://cloud.cubert-gmbh.de/index.php/s/3oECVGWpC1NpNqC).
+These measurements are also used by the examples mentioned above.
 
 ### Getting involved
 
