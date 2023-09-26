@@ -23,13 +23,23 @@ source code page.
 
 First, you need to install the Cuvis C SDK from [here](https://cloud.cubert-gmbh.de/index.php/s/kKVtx0x2fmYqVgx).
 
-### Full SDK
+### Importing the Cuvis C# Wrapper via CMake
 
-:warning: NEED TO DO
+First, you need to add the directory containing *cuvis_chsarp.cmake* to *CMAKE_MODULE_PATH*. Assuming you added the *cuvis.csharp* repository as submodule as "${CMAKE_SOURCE_DIR}/cuvis.csharp" you can add it like so:
+```
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cuvis.csharp")
+```
+Then you need to include *cuvis_csharp.cmake*:
+```
+include(cuvis_csharp)
+```
+If cuvis is installed to default locations, they are found automatically. Else, locate the cuvis.lib and the directory containing cuvis.h.
 
-### Compiling code
-
-:warning: NEED TO DO
+Finally, link against *cuvis::csharp*. In the following example, the target *main* is linked aginst cuvis:
+```
+add_executable(main main.cs)
+target_link_libraries(main PRIVATE cuvis::csharp)
+```
 
 ## How to ...
 
