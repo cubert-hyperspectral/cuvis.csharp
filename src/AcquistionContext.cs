@@ -328,6 +328,30 @@ namespace cuvis_net
             return new Async(cuvis_il.p_int_value(pAsync));
         }
 
+        public double AutoExposureComp
+        {
+            set
+            {
+                cuvis_il.cuvis_acq_cont_auto_exp_comp_set(handle_, value);
+            }
+            get
+            {
+                SWIGTYPE_p_double val = cuvis_il.new_p_double();
+                cuvis_il.cuvis_acq_cont_auto_exp_comp_get(handle_, val);
+                return cuvis_il.p_double_value(val);
+            }
+        }
+
+        public Async SetAutoExposureCompAsync(double value)
+        {
+            var pAsync = cuvis_il.new_p_int();
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_auto_exp_comp_set_async(handle_, pAsync, value))
+            {
+                throw new SDK_Exception();
+            }
+            return new Async(cuvis_il.p_int_value(pAsync));
+        }
+
 
         public OperationMode OperationMode
         {
