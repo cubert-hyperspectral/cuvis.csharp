@@ -18,24 +18,34 @@ namespace cuvis_net
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
-        public Measurement GetMeasurement(int frameNo, cuvis_session_item_type_t type = cuvis_session_item_type_t.session_item_type_frames)
+        public Measurement GetMeasurement(int frameNo, SessionItemType type = SessionItemType.Frames)
         {
             var pHandle = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_mesu(handle_, frameNo, type, pHandle))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_mesu(handle_, frameNo, (cuvis_session_item_type_t)type, pHandle))
             {
                 throw new SDK_Exception();
             }
             var mesuHandle = cuvis_il.p_int_value(pHandle);
             return new Measurement(mesuHandle);
+        }
 
+        public Measurement GetReferenceMeasurement(int frameNo, ReferenceType type)
+        {
+            var pHandle = cuvis_il.new_p_int();
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_reference_mesu(handle_, frameNo, (cuvis_reference_type_t)type, pHandle))
+            {
+                throw new SDK_Exception();
+            }
+            var mesuHandle = cuvis_il.p_int_value(pHandle);
+            return new Measurement(mesuHandle);
         }
 
 
-        public int GetSize(cuvis_session_item_type_t type = cuvis_session_item_type_t.session_item_type_frames)
+        public int GetSize(SessionItemType type = SessionItemType.Frames)
         {
 
             SWIGTYPE_p_int val = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_size(handle_, type, val))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_size(handle_, (cuvis_session_item_type_t)type, val))
             {
                 throw new SDK_Exception();
             }
