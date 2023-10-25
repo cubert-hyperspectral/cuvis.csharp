@@ -180,6 +180,13 @@ namespace cuvis_net
         Distance = cuvis_reference_type_t.Reference_Distance
     };
 
+    public enum SessionItemType
+    {
+        FramesNoGaps = cuvis_session_item_type_t.session_item_type_frames_no_gaps,
+        Frames = cuvis_session_item_type_t.session_item_type_frames,
+        References = cuvis_session_item_type_t.session_item_type_references
+    };
+
     public enum PanSharpeningInterpolationType
     {
         NearestNeighbour = cuvis_pan_sharpening_interpolation_type_t.pan_sharpening_interpolation_type_NearestNeighbor,
