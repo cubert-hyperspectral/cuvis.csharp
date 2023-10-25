@@ -21,7 +21,12 @@ namespace cuvis_net
         public Measurement GetMeasurement(int frameNo, SessionItemType type = SessionItemType.Frames)
         {
             var pHandle = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_mesu(handle_, frameNo, (cuvis_session_item_type_t)type, pHandle))
+            var ret = cuvis_il.cuvis_session_file_get_mesu(handle_, frameNo, (cuvis_session_item_type_t)type, pHandle);
+            if (ret == cuvis_status_t.status_no_measurement) 
+            {
+                return null;
+            }
+            if (cuvis_status_t.status_ok != ret)
             {
                 throw new SDK_Exception();
             }
@@ -32,7 +37,12 @@ namespace cuvis_net
         public Measurement GetReferenceMeasurement(int frameNo, ReferenceType type)
         {
             var pHandle = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_reference_mesu(handle_, frameNo, (cuvis_reference_type_t)type, pHandle))
+            var ret = cuvis_il.cuvis_session_file_get_reference_mesu(handle_, frameNo, (cuvis_reference_type_t)type, pHandle);
+            if (ret == cuvis_status_t.status_no_measurement)
+            {
+                return null;
+            }
+            if (cuvis_status_t.status_ok != ret)
             {
                 throw new SDK_Exception();
             }
