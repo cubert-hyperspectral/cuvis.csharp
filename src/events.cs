@@ -34,7 +34,7 @@ namespace cuvis_net
                 Event e = new Event();
                 callback(e);
             };
-            int hander_id =  RegisterEventCallback(internal_callback, (int)type);
+            int hander_id = RegisterEventCallback(internal_callback, (int)type);
             internal_callbacks.Add(hander_id, internal_callback);
             return hander_id;
         }

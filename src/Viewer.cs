@@ -18,7 +18,6 @@ namespace cuvis_net
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
-
         internal static ViewResult createViewData(int currentView)
         {
             var countHandle = cuvis_il.new_p_int();
@@ -78,10 +77,7 @@ namespace cuvis_net
             return createViewData(currentView);
         }
 
-
-
         bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {
@@ -90,7 +86,6 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
             }
@@ -114,10 +109,7 @@ namespace cuvis_net
         {
             Dispose(disposing: false);
         }
-
-
     }
-
 
     public class ViewResult
     {

@@ -10,11 +10,9 @@ namespace cuvis_net
 
     public class Measurement : System.IDisposable, System.ICloneable
     {
-
-
         internal int handle_ = 0;
         private cuvis_mesu_metadata_t metaData_;
-        private System.Collections.Generic.Dictionary<string, System.Lazy<Data>> dataMap_;
+        private Dictionary<string, System.Lazy<Data>> dataMap_;
         private GeoCoordinate gpsData_;
         private Bitmap preview_image_;
 
@@ -52,14 +50,12 @@ namespace cuvis_net
 
         internal void Refresh()
         {
-            dataMap_ = new System.Collections.Generic.Dictionary<string, System.Lazy<Data>>();
-
+            dataMap_ = new Dictionary<string, System.Lazy<Data>>();
 
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_measurement_get_metadata(handle_, metaData_))
             {
                 throw new SDK_Exception();
             }
-
 
             var pCount = cuvis_il.new_p_int();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_measurement_get_data_count(handle_, pCount))
@@ -140,10 +136,7 @@ namespace cuvis_net
                     cuvis_il.cuvis_gps_free(pBuf);
                     //    cuvis_gps_t t;
                     //    var value = cuvis_il.cuvis_measurement_get_data_gps(handle_, key,t);
-
                 }
-
-
             }
         }
 
@@ -169,7 +162,6 @@ namespace cuvis_net
             }
         }
 
-
         #region Measurement Metadata
         public string Name
         {
@@ -183,7 +175,9 @@ namespace cuvis_net
                 Refresh();
             }
         }
+
         public string Path { get { return metaData_.path; } }
+
         public string Comment
         {
             get { return metaData_.comment; }
@@ -196,13 +190,21 @@ namespace cuvis_net
                 Refresh();
             }
         }
+
         public System.DateTime CaptureTime { get { return Helper.ToDateTime(metaData_.capture_time); } }
+
         public System.DateTime FactoryCalibration { get { return Helper.ToDateTime(metaData_.factory_calibration); } }
+
         public string ProductName { get { return metaData_.product_name; } }
+
         public string SerialNumber { get { return metaData_.serial_number; } }
+
         public string Assembly { get { return metaData_.assembly; } }
+
         public double IntegrationTime { get { return metaData_.integration_time; } }
+
         public double? Distance { get { double? ret = null; if (metaData_.distance > 0.0) { ret = metaData_.distance; }; return ret; } }
+
         public int Averages { get { return metaData_.averages; } }
 
         public GeoCoordinate GPS { get { return gpsData_; } }
@@ -210,7 +212,9 @@ namespace cuvis_net
         public Bitmap Thumbnail { get { return preview_image_; } }
 
         public IEnumerable<MeasurementFlag> MeasurementFlags { get { return MeasurementFlagConversion.FromBitset(metaData_.measurement_flags); } }
+
         public ProcessingMode ProcessingMode { get { return (ProcessingMode)metaData_.processing_mode; } }
+
         public SessionData Session
         {
             get
@@ -222,13 +226,12 @@ namespace cuvis_net
 
         #endregion
 
-        public System.Collections.Generic.Dictionary<string, System.Lazy<Data>> Data
+        public Dictionary<string, System.Lazy<Data>> Data
         {
             get { return dataMap_; }
         }
 
         bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {
@@ -237,9 +240,16 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
+                if (preview_image_ != null)
+                {
+                    preview_image_.Dispose();
+                }
+                if (metaData_ != null)
+                {
+                    metaData_.Dispose();
+                }
             }
 
             var pHandle = cuvis_il.new_p_int();
@@ -269,8 +279,6 @@ namespace cuvis_net
             Refresh();
         }
 
-
-
         public void Dispose()
         {
             // Dispose of unmanaged resources.
@@ -283,7 +291,6 @@ namespace cuvis_net
         {
             Dispose(disposing: false);
         }
-
 
         public object Clone()
         {
@@ -303,6 +310,4 @@ namespace cuvis_net
             get { return cuvis_il.cuvis_measurement_get_calib_id_swig(handle_); }
         }
     }
-
-
 }
