@@ -36,7 +36,7 @@ namespace cuvis_net
         public void Dispose()
         {
             // Dispose of unmanaged resources.
-            Dispose(true);
+            Dispose(false);
             // Suppress finalization.
             GC.SuppressFinalize(this);
         }
