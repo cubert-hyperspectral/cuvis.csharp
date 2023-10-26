@@ -2,8 +2,6 @@ using System;
 
 namespace cuvis_net
 {
-
-
     public class ProcessingContext : System.IDisposable
     {
         cuvis_proc_args_t modeArgs_ = new cuvis_proc_args_t();
@@ -98,8 +96,8 @@ namespace cuvis_net
                 throw new SDK_Exception();
             }
         }
-		
-		public void ClearReference(ReferenceType referenceType)
+
+        public void ClearReference(ReferenceType referenceType)
         {
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_clear_reference(handle_, (cuvis_reference_type_t)referenceType))
             {
@@ -129,13 +127,12 @@ namespace cuvis_net
             return value == 1;
         }
 
-        //mark/todo add procMode Argument
         public bool IsCapable(Measurement mesu, ProcessingMode processingMode, bool allowRecalib)
         {
             cuvis_proc_args_t args = new cuvis_proc_args_t();
             args.processing_mode = (cuvis_processing_mode_t)processingMode;
             args.allow_recalib = allowRecalib ? 1 : 0;
-            
+
             var pHandle = cuvis_il.new_p_int();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_is_capable(handle_, mesu.handle_, args, pHandle))
             {
@@ -145,10 +142,7 @@ namespace cuvis_net
             return value == 1;
         }
 
-
-
         bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {
@@ -157,9 +151,9 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
+                modeArgs_.Dispose();
             }
 
             var pHandle = cuvis_il.new_p_int();
@@ -183,12 +177,9 @@ namespace cuvis_net
             Dispose(disposing: false);
         }
 
-
         public string CalibrationID
         {
             get { return cuvis_il.cuvis_proc_cont_get_calib_id_swig(handle_); }
         }
     }
-
-
 }

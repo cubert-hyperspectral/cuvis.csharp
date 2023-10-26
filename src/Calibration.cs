@@ -4,12 +4,8 @@ using System.Collections.Generic;
 
 namespace cuvis_net
 {
-
-
     public class Calibration : System.IDisposable
     {
-
-
         internal int handle_ = 0;
 
         public Calibration(string path)
@@ -32,10 +28,7 @@ namespace cuvis_net
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
-
-
         bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {
@@ -44,7 +37,6 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
             }
@@ -68,8 +60,6 @@ namespace cuvis_net
         {
             Dispose(disposing: false);
         }
-
-
 
         public IEnumerable<Capability> GetCapabilities(OperationMode mode)
         {

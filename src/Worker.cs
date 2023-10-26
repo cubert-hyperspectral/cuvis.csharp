@@ -26,8 +26,6 @@ namespace cuvis_net
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
-        #region Getter / Setter
-
         public void RegisterWorkerCallback(WorkerCallback callback, uint concurrency)
         {
             ResetWorkerCallback();
@@ -37,6 +35,15 @@ namespace cuvis_net
             workerThreadRun = true;
             workerThread = new Thread(new ThreadStart(ws.Process));
             workerThread.Start();
+        }
+
+        public void ResetWorkerCallback()
+        {
+            workerThreadRun = false;
+            if (workerThread != null)
+            {
+                workerThread.Join();
+            }
         }
 
         private class WorkerState
@@ -51,6 +58,7 @@ namespace cuvis_net
                 this.concurrency = concurrency;
                 this.parent = parent;
             }
+
             public void Process()
             {
                 int pollTimeMs = 10;
@@ -89,16 +97,7 @@ namespace cuvis_net
             }
         }
 
-
-
-        public void ResetWorkerCallback()
-        {
-            workerThreadRun = false;
-            if (workerThread != null)
-            {
-                workerThread.Join();
-            }
-        }
+        #region Getter / Setter
 
         AcquistionContext AcquistionContext
         {
@@ -120,6 +119,7 @@ namespace cuvis_net
                 }
             }
         }
+
         ProcessingContext ProcessingContext
         {
             set
@@ -272,13 +272,9 @@ namespace cuvis_net
                 return value != 0;
             }
         }
-
-
         #endregion
 
-
         bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {
@@ -287,10 +283,11 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
             }
+
+            ResetWorkerCallback();
 
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);

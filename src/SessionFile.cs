@@ -112,7 +112,6 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
             }

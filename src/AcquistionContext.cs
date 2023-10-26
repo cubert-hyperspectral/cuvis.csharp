@@ -5,8 +5,6 @@ using System.Threading;
 
 namespace cuvis_net
 {
-
-
     public class AcquistionContext : System.IDisposable
     {
         private bool stateCheckRun = false;
@@ -210,13 +208,9 @@ namespace cuvis_net
             int value = cuvis_il.p_int_value(val);
             return value;
         }
-
-
-
         #endregion
 
         #region Aquisition Properties
-
         public double FPS
         {
             set
@@ -236,6 +230,7 @@ namespace cuvis_net
                 return cuvis_il.p_double_value(val);
             }
         }
+
         public Async SetFPSAsync(double value)
         {
             var pAsync = cuvis_il.new_p_int();
@@ -246,8 +241,6 @@ namespace cuvis_net
 
             return new Async(cuvis_il.p_int_value(pAsync));
         }
-
-
 
         public bool PreviewMode
         {
@@ -268,6 +261,7 @@ namespace cuvis_net
                 return cuvis_il.p_int_value(val) > 0;
             }
         }
+
         public Async PreviewModeAsync(bool value)
         {
             var pAsync = cuvis_il.new_p_int();
@@ -351,7 +345,6 @@ namespace cuvis_net
             }
             return new Async(cuvis_il.p_int_value(pAsync));
         }
-
 
         public OperationMode OperationMode
         {
@@ -456,7 +449,6 @@ namespace cuvis_net
             cuvis_il.cuvis_comp_gain_set(handle_, id, value);
         }
 
-
         public Async SetGainAsync(int id, double value)
         {
             var pAsync = cuvis_il.new_p_int();
@@ -467,6 +459,7 @@ namespace cuvis_net
 
             return new Async(cuvis_il.p_int_value(pAsync));
         }
+
         public double GetIntegrationTimeFactor(int id)
         {
             var val = cuvis_il.new_p_double();
@@ -489,7 +482,6 @@ namespace cuvis_net
 
             return new Async(cuvis_il.p_int_value(pAsync));
         }
-
         #endregion
 
         public AsyncMesu Capture()
@@ -503,9 +495,7 @@ namespace cuvis_net
             return am;
         }
 
-
         bool disposed = false;
-
 
         protected virtual void Dispose(bool disposing)
         {
@@ -514,10 +504,11 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
             }
+
+            ResetStateChangeCallback();
 
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);
@@ -539,7 +530,6 @@ namespace cuvis_net
         {
             Dispose(disposing: false);
         }
-
 
         #region State Callback
 
@@ -625,26 +615,24 @@ namespace cuvis_net
 
                 }
             }
-
-
         }
         #endregion
 
 
         #region Component
 
-        public IEnumerable<Component> Components 
+        public IEnumerable<Component> Components
         {
-            get {
+            get
+            {
                 List<Component> components = new List<Component>();
-                for (int i = 0; i < ComponentCount; i++) 
+                for (int i = 0; i < ComponentCount; i++)
                 {
                     components.Add(new Component(this, i));
                 }
                 return components;
             }
         }
-
         #endregion
     }
 
@@ -707,9 +695,9 @@ namespace cuvis_net
             }
         }
 
-        public ComponentInfo Info 
+        public ComponentInfo Info
         {
-            get 
+            get
             {
                 return _acq.GetComponentInfo(_idx);
             }

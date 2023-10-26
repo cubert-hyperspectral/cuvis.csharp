@@ -7,10 +7,6 @@ namespace cuvis_net
     public class Exporter : System.IDisposable
     {
         internal int handle_ = 0;
-
-
-
-
         bool disposed = false;
 
 
@@ -21,7 +17,6 @@ namespace cuvis_net
 
             if (disposing)
             {
-                Dispose();
                 // Free any other managed objects here.
                 //
             }
@@ -36,7 +31,7 @@ namespace cuvis_net
         public void Dispose()
         {
             // Dispose of unmanaged resources.
-            Dispose(false);
+            Dispose(true);
             // Suppress finalization.
             GC.SuppressFinalize(this);
         }
