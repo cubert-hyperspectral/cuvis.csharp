@@ -21,7 +21,7 @@ source code page.
 
 ### Prerequisites
 
-First, you need to install the Cuvis C SDK from [here](https://cloud.cubert-gmbh.de/index.php/s/kKVtx0x2fmYqVgx).
+First, you need to install the Cuvis C SDK from [here](https://cloud.cubert-gmbh.de/index.php/s/m1WfR66TjcGl96z).
 
 ### Importing the Cuvis C# Wrapper via CMake
 
