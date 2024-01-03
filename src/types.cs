@@ -360,7 +360,6 @@ namespace cuvis_net
         {
             WorkerCount = (uint)ws.worker_count;
             PollIntervallInMs = ws.poll_interval;
-            KeepOutOfSequence = ws.keep_out_of_sequence > 0;
             QueueHardLimit = ws.worker_queue_hard_limit;
             QueueSoftLimit = ws.worker_queue_soft_limit;
             CanDrop = ws.can_drop > 0;
@@ -374,7 +373,6 @@ namespace cuvis_net
             cuvis_worker_settings_t ws = new cuvis_worker_settings_t();
             ws.worker_count = (int)WorkerCount;
             ws.poll_interval = (int)PollIntervallInMs;
-            ws.keep_out_of_sequence = (KeepOutOfSequence ? 1 : 0);
             ws.worker_queue_hard_limit = QueueHardLimit;
             ws.worker_queue_soft_limit = QueueSoftLimit;
             ws.can_drop = (CanDrop ? 1 : 0);
@@ -450,7 +448,7 @@ namespace cuvis_net
 
         public string ChannelSelection { get; set; }
 
-        public double SpectraMultiplier { get; set; }
+        public byte SpectraMultiplier { get; set; }
 
         public double PanScale { get; set; }
 
@@ -473,7 +471,7 @@ namespace cuvis_net
                 GeneralExportSettings args = new GeneralExportSettings();
                 args.ExportDir = ".";
                 args.ChannelSelection = "all";
-                args.SpectraMultiplier = 1.0;
+                args.SpectraMultiplier = 1;
                 args.PanScale = 0.0;
                 args.PanSharpeningInterpolationType = PanSharpeningInterpolationType.Linear;
                 args.PanSharpeningAlgorithmType = PanSharpeningAlgorithm.CubertMacroPixel;
@@ -485,7 +483,7 @@ namespace cuvis_net
             }
         }
 
-        public GeneralExportSettings(string exportDir, string channelSelection, double spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
+        public GeneralExportSettings(string exportDir, string channelSelection, byte spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
         {
             ExportDir = exportDir;
             ChannelSelection = channelSelection;
