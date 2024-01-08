@@ -358,7 +358,6 @@ namespace cuvis_net
         {
             WorkerCount = (uint)ws.worker_count;
             PollIntervallInMs = ws.poll_interval;
-            KeepOutOfSequence = ws.keep_out_of_sequence > 0;
             QueueHardLimit = ws.worker_queue_hard_limit;
             QueueSoftLimit = ws.worker_queue_soft_limit;
             CanDrop = ws.can_drop > 0;
@@ -369,7 +368,6 @@ namespace cuvis_net
             cuvis_worker_settings_t ws = new cuvis_worker_settings_t();
             ws.worker_count = (int)WorkerCount;
             ws.poll_interval = (int)PollIntervallInMs;
-            ws.keep_out_of_sequence = (KeepOutOfSequence ? 1 : 0);
             ws.worker_queue_hard_limit = QueueHardLimit;
             ws.worker_queue_soft_limit = QueueSoftLimit;
             ws.can_drop = (CanDrop ? 1 : 0);
@@ -412,7 +410,7 @@ namespace cuvis_net
     public class SensorInfo : Data
     {
 
-        public SensorInfo(uint averages, int temperature, double gain, DateTime readouttine)
+        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttine)
         {
             Averages = averages;
             Temperature = temperature;
@@ -430,7 +428,7 @@ namespace cuvis_net
 
         public uint Averages { get; set; }
 
-        public int Temperature { get; set; }
+        public double Temperature { get; set; }
 
         public double Gain { get; set; }
 
@@ -513,7 +511,7 @@ namespace cuvis_net
             cuvis_export_general_settings_t ge = new cuvis_export_general_settings_t();
             ge.export_dir = ExportDir;
             ge.channel_selection = ChannelSelection;
-            ge.spectra_multiplier = SpectraMultiplier;
+            ge.spectra_multiplier = (byte)SpectraMultiplier;
             ge.pan_scale = PanScale;
             ge.pan_interpolation_type = (cuvis_pan_sharpening_interpolation_type_t)PanSharpeningInterpolationType;
             ge.pan_algorithm = (cuvis_pan_sharpening_algorithm_t)PanSharpeningAlgorithmType;
