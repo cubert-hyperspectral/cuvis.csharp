@@ -561,7 +561,7 @@ namespace cuvis_net
             AcquistionContext parent;
             bool outputInitial;
 
-            public CheckState(StateCallback callback, AcquistionContext parent, bool outputInital)
+            public CheckState(StateCallback callback, AcquistionContext parent, bool outputInitial)
             {
                 this.callback = callback;
                 this.parent = parent;
