@@ -142,14 +142,14 @@ namespace cuvis_net
             return new Measurement(cuvis_il.p_int_value(val));
         }
 
-        public int GetTemperature(int id)
+        public double GetTemperature(int id)
         {
-            var val = cuvis_il.new_p_int();
+            var val = cuvis_il.new_p_double();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_comp_temperature_get(handle_, id, val))
             {
                 throw new SDK_Exception();
             }
-            int value = cuvis_il.p_int_value(val);
+            double value = cuvis_il.p_double_value(val);
             return value;
         }
 
@@ -561,7 +561,7 @@ namespace cuvis_net
             AcquistionContext parent;
             bool outputInitial;
 
-            public CheckState(StateCallback callback, AcquistionContext parent, bool outputInital)
+            public CheckState(StateCallback callback, AcquistionContext parent, bool outputInitial)
             {
                 this.callback = callback;
                 this.parent = parent;
@@ -655,7 +655,7 @@ namespace cuvis_net
             }
         }
 
-        public int Temperature
+        public double Temperature
         {
             get
             {

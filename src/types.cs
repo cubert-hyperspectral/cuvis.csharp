@@ -341,16 +341,14 @@ namespace cuvis_net
         public uint WorkerCount { get; set; }
 
         public int PollIntervallInMs { get; set; }
-        public bool KeepOutOfSequence { get; set; }
         public int QueueHardLimit { get; set; }
         public int QueueSoftLimit { get; set; }
         public bool CanDrop { get; set; }
 
-        public WorkerArgs(uint workerCount, int pollIntervallInMs, bool keepOutOfSequence, int queueHardLimit, int queueSoftLimit, bool canDrop)
+        public WorkerArgs(uint workerCount, int pollIntervallInMs, int queueHardLimit, int queueSoftLimit, bool canDrop)
         {
             WorkerCount = workerCount;
             PollIntervallInMs = pollIntervallInMs;
-            KeepOutOfSequence = keepOutOfSequence;
             QueueHardLimit = queueHardLimit;
             QueueSoftLimit = queueSoftLimit;
             CanDrop = canDrop;
@@ -360,13 +358,9 @@ namespace cuvis_net
         {
             WorkerCount = (uint)ws.worker_count;
             PollIntervallInMs = ws.poll_interval;
-            KeepOutOfSequence = ws.keep_out_of_sequence > 0;
             QueueHardLimit = ws.worker_queue_hard_limit;
             QueueSoftLimit = ws.worker_queue_soft_limit;
             CanDrop = ws.can_drop > 0;
-
-
-
         }
 
         internal cuvis_worker_settings_t GetInternal()
@@ -374,7 +368,6 @@ namespace cuvis_net
             cuvis_worker_settings_t ws = new cuvis_worker_settings_t();
             ws.worker_count = (int)WorkerCount;
             ws.poll_interval = (int)PollIntervallInMs;
-            ws.keep_out_of_sequence = (KeepOutOfSequence ? 1 : 0);
             ws.worker_queue_hard_limit = QueueHardLimit;
             ws.worker_queue_soft_limit = QueueSoftLimit;
             ws.can_drop = (CanDrop ? 1 : 0);
@@ -417,7 +410,7 @@ namespace cuvis_net
     public class SensorInfo : Data
     {
 
-        public SensorInfo(uint averages, int temperature, double gain, DateTime readouttine)
+        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttine)
         {
             Averages = averages;
             Temperature = temperature;
@@ -435,7 +428,7 @@ namespace cuvis_net
 
         public uint Averages { get; set; }
 
-        public int Temperature { get; set; }
+        public double Temperature { get; set; }
 
         public double Gain { get; set; }
 
@@ -503,7 +496,7 @@ namespace cuvis_net
         {
             ExportDir = ge.export_dir;
             ChannelSelection = ge.channel_selection;
-            SpectraMultiplier = ge.spectra_multiplier;
+            SpectraMultiplier = (byte)ge.spectra_multiplier;
             PanScale = ge.pan_scale;
             PanSharpeningInterpolationType = (PanSharpeningInterpolationType)ge.pan_interpolation_type;
             PanSharpeningAlgorithmType = (PanSharpeningAlgorithm)ge.pan_algorithm;
@@ -518,7 +511,7 @@ namespace cuvis_net
             cuvis_export_general_settings_t ge = new cuvis_export_general_settings_t();
             ge.export_dir = ExportDir;
             ge.channel_selection = ChannelSelection;
-            ge.spectra_multiplier = SpectraMultiplier;
+            ge.spectra_multiplier = (byte)SpectraMultiplier;
             ge.pan_scale = PanScale;
             ge.pan_interpolation_type = (cuvis_pan_sharpening_interpolation_type_t)PanSharpeningInterpolationType;
             ge.pan_algorithm = (cuvis_pan_sharpening_algorithm_t)PanSharpeningAlgorithmType;
