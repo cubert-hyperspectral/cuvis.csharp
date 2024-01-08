@@ -341,16 +341,14 @@ namespace cuvis_net
         public uint WorkerCount { get; set; }
 
         public int PollIntervallInMs { get; set; }
-        public bool KeepOutOfSequence { get; set; }
         public int QueueHardLimit { get; set; }
         public int QueueSoftLimit { get; set; }
         public bool CanDrop { get; set; }
 
-        public WorkerArgs(uint workerCount, int pollIntervallInMs, bool keepOutOfSequence, int queueHardLimit, int queueSoftLimit, bool canDrop)
+        public WorkerArgs(uint workerCount, int pollIntervallInMs, int queueHardLimit, int queueSoftLimit, bool canDrop)
         {
             WorkerCount = workerCount;
             PollIntervallInMs = pollIntervallInMs;
-            KeepOutOfSequence = keepOutOfSequence;
             QueueHardLimit = queueHardLimit;
             QueueSoftLimit = queueSoftLimit;
             CanDrop = canDrop;
@@ -364,9 +362,6 @@ namespace cuvis_net
             QueueHardLimit = ws.worker_queue_hard_limit;
             QueueSoftLimit = ws.worker_queue_soft_limit;
             CanDrop = ws.can_drop > 0;
-
-
-
         }
 
         internal cuvis_worker_settings_t GetInternal()
@@ -503,7 +498,7 @@ namespace cuvis_net
         {
             ExportDir = ge.export_dir;
             ChannelSelection = ge.channel_selection;
-            SpectraMultiplier = ge.spectra_multiplier;
+            SpectraMultiplier = (byte)ge.spectra_multiplier;
             PanScale = ge.pan_scale;
             PanSharpeningInterpolationType = (PanSharpeningInterpolationType)ge.pan_interpolation_type;
             PanSharpeningAlgorithmType = (PanSharpeningAlgorithm)ge.pan_algorithm;
