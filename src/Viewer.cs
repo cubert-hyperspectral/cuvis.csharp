@@ -39,7 +39,6 @@ namespace cuvis_net
                     throw new SDK_Exception();
                 }
 
-                ImageData<byte> data;
                 switch (view_data.data.format)
                 {
                     case cuvis_imbuffer_format_t.imbuffer_format_uint8:
@@ -52,15 +51,19 @@ namespace cuvis_net
                                 case cuvis_view_category_t.view_category_image:
                                     imageList.Add(ImageData<byte>.ToGreyscale(new ImageData<byte>(view_data.data)));
                                     break;
+#pragma warning disable 0162
                                 default:
                                     throw new System.ArgumentException("unsupported view bit depth");
                                     break;
+#pragma warning restore 0162
                             }
                             break;
                         }
+#pragma warning disable 0162
                     default:
                         throw new System.ArgumentException("unsupported view bit depth");
                         break;
+#pragma warning restore 0162
                 }
             }
             return new ViewResult(dataList,imageList,true);

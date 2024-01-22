@@ -443,7 +443,7 @@ namespace cuvis_net
 
         public string ChannelSelection { get; set; }
 
-        public double SpectraMultiplier { get; set; }
+        public byte SpectraMultiplier { get; set; }
 
         public double PanScale { get; set; }
 
@@ -466,7 +466,7 @@ namespace cuvis_net
                 GeneralExportSettings args = new GeneralExportSettings();
                 args.ExportDir = ".";
                 args.ChannelSelection = "all";
-                args.SpectraMultiplier = 1.0;
+                args.SpectraMultiplier = 1;
                 args.PanScale = 0.0;
                 args.PanSharpeningInterpolationType = PanSharpeningInterpolationType.Linear;
                 args.PanSharpeningAlgorithmType = PanSharpeningAlgorithm.CubertMacroPixel;
@@ -478,7 +478,7 @@ namespace cuvis_net
             }
         }
 
-        public GeneralExportSettings(string exportDir, string channelSelection, double spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
+        public GeneralExportSettings(string exportDir, string channelSelection, byte spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
         {
             ExportDir = exportDir;
             ChannelSelection = channelSelection;
