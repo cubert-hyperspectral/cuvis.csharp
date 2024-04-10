@@ -424,6 +424,8 @@ namespace cuvis_net
             Temperature = si.temperature;
             Gain = si.gain;
             ReadOutTime = Helper.ToDateTime(si.readout_time);
+            Width = si.width;
+            Height = si.height;
         }
 
         public uint Averages { get; set; }
@@ -431,6 +433,10 @@ namespace cuvis_net
         public double Temperature { get; set; }
 
         public double Gain { get; set; }
+
+        public int Width { get; set; }
+
+        public int Height { get; set; }
 
         public DateTime ReadOutTime { get; set; }
     }
