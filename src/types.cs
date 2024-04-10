@@ -434,9 +434,9 @@ namespace cuvis_net
 
         public double Gain { get; set; }
 
-        public double Width { get; set; }
+        public int Width { get; set; }
 
-        public double Height { get; set; }
+        public int Height { get; set; }
 
         public DateTime ReadOutTime { get; set; }
     }
