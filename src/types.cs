@@ -434,9 +434,9 @@ namespace cuvis_net
 
         public double Gain { get; set; }
 
-        public int Width { get; set; }
+        public uint Width { get; set; }
 
-        public int Height { get; set; }
+        public uint Height { get; set; }
 
         public DateTime ReadOutTime { get; set; }
     }
@@ -697,13 +697,13 @@ namespace cuvis_net
         public data_t[,,] arr;
         public uint[]? wavelength;
 
-        private int width;
-        private int height;
-        private int channels;
+        private uint width;
+        private uint height;
+        private uint channels;
 
-        public int Width { get { return width; } }
-        public int Height { get { return height; } }
-        public int Channels { get { return channels; } }
+        public uint Width { get { return width; } }
+        public uint Height { get { return height; } }
+        public uint Channels { get { return channels; } }
 
 
         internal static Bitmap ToGreyscale(ImageData<byte> image)
@@ -712,14 +712,14 @@ namespace cuvis_net
             {
                 return null;
             }
-            var b = new Bitmap(image.Width, image.Height, PixelFormat.Format8bppIndexed);
+            var b = new Bitmap((int)image.Width, (int)image.Height, PixelFormat.Format8bppIndexed);
 
             ColorPalette ncp = b.Palette;
             for (int i = 0; i < 256; i++)
                 ncp.Entries[i] = Color.FromArgb(255, i, i, i);
             b.Palette = ncp;
 
-            var BoundsRect = new Rectangle(0, 0, image.Width, image.Height);
+            var BoundsRect = new Rectangle(0, 0, (int)image.Width, (int)image.Height);
             BitmapData bmpData = b.LockBits(BoundsRect,
                                             ImageLockMode.WriteOnly,
                                             b.PixelFormat);
@@ -765,8 +765,8 @@ namespace cuvis_net
         }
         internal ImageData(cuvis_imbuffer_t buf)
         {
-            this.height = (int)buf.height;
-            this.width = (int)buf.width;
+            this.height = buf.height;
+            this.width = buf.width;
             this.channels = buf.channels;
 
             unsafe
