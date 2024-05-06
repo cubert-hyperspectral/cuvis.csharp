@@ -1,9 +1,3 @@
-
-
-
-
-
-
 using System;
 using System.Collections.Generic;
 using System.Device.Location;
@@ -13,8 +7,6 @@ using System.Runtime.InteropServices;
 
 namespace cuvis_net
 {
-
-
     public class General
     {
         public delegate void Log(string message, LogLevel level);
@@ -66,10 +58,10 @@ namespace cuvis_net
             }
         }
 
-        public static void Init(string settings_path)
+        public static void Init(string settings_path, LogLevel global_loglevel = LogLevel.debug)
         {
 
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path, global_loglevel))
             {
                 throw new SDK_Exception();
             }
