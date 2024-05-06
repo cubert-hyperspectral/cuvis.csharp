@@ -61,7 +61,7 @@ namespace cuvis_net
         public static void Init(string settings_path, LogLevel global_loglevel = LogLevel.debug)
         {
 
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path, global_loglevel))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path, (int)global_loglevel))
             {
                 throw new SDK_Exception();
             }
@@ -687,7 +687,7 @@ namespace cuvis_net
     {
 
         public data_t[,,] arr;
-        public uint[]? wavelength;
+        public uint[] wavelength;
 
         private uint width;
         private uint height;
