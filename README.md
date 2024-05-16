@@ -20,7 +20,7 @@ source code page.
 
 ### Prerequisites
 
-First, you need to install the Cuvis C SDK from [here](https://cloud.cubert-gmbh.de/index.php/s/m1WfR66TjcGl96z).
+First, you need to install the Cuvis C SDK from [here](https://cloud.cubert-gmbh.de/s/q3YiPZPJe5oXziZ).
 
 ### Importing the Cuvis C# Wrapper via CMake
 
@@ -47,7 +47,7 @@ target_link_libraries(main PRIVATE cuvis::csharp)
 We provide an additional example repository [here](https://github.com/cubert-hyperspectral/cuvis.csharp.examples),
 covering some basic applications.
 
-Further, we provide a set of example measurements to explore [here](https://cloud.cubert-gmbh.de/index.php/s/3oECVGWpC1NpNqC).
+Further, we provide a set of example measurements to explore [here](https://cloud.cubert-gmbh.de/s/SrkSRja5FKGS2Tw).
 These measurements are also used by the examples mentioned above.
 
 ### Getting involved
