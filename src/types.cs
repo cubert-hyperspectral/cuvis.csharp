@@ -402,12 +402,13 @@ namespace cuvis_net
     public class SensorInfo : Data
     {
 
-        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttine)
+        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttime, ulong frame_id)
         {
             Averages = averages;
             Temperature = temperature;
             Gain = gain;
-            ReadOutTime = readouttine;
+            ReadOutTime = readouttime;
+            RawFrameID = frame_id;
         }
 
         internal SensorInfo(cuvis_sensor_info_t si)
@@ -418,6 +419,7 @@ namespace cuvis_net
             ReadOutTime = Helper.ToDateTime(si.readout_time);
             Width = si.width;
             Height = si.height;
+            RawFrameID = si.raw_frame_id;
         }
 
         public uint Averages { get; set; }
@@ -431,6 +433,9 @@ namespace cuvis_net
         public uint Height { get; set; }
 
         public DateTime ReadOutTime { get; set; }
+
+        public ulong RawFrameID { get; set; }
+
     }
 
     #region Export Settings
