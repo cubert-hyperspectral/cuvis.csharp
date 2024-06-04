@@ -207,6 +207,8 @@ namespace cuvis_net
 
         public int Averages { get { return metaData_.averages; } }
 
+        public ulong FrameID { get { return metaData_.measurement_frame_id;  } }
+
         public GeoCoordinate GPS { get { return gpsData_; } }
 
         public Bitmap Thumbnail { get { return preview_image_; } }
