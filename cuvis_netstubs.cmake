@@ -23,6 +23,7 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_status_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_int.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_unsigned_char.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_unsigned_int.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_unsigned_long_long.cs
 #${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_void.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_il.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_ilPINVOKE.cs
