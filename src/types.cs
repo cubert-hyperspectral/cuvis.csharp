@@ -290,7 +290,7 @@ namespace cuvis_net
         }
     }
 
-    public enum MeasurementFlag 
+    public enum MeasurementFlag
     {
         Overilluminated = 1,
         PoorReference = 2,
@@ -303,7 +303,7 @@ namespace cuvis_net
         WhiteDarkTemp = 256
     }
 
-    public static class MeasurementFlagConversion 
+    public static class MeasurementFlagConversion
     {
         public static IEnumerable<MeasurementFlag> FromBitset(uint bitset)
         {
@@ -594,7 +594,7 @@ namespace cuvis_net
         public int SoftLimit { get; set; }
         public int HardLimit { get; set; }
         public int MaxBufTimeMilliseconds { get; set; }
-
+        public bool FullExport { get; set; }
         public static SaveArgs Default
         {
             // C# doesn't allow parameterless constructors for structs
@@ -612,6 +612,7 @@ namespace cuvis_net
                 args.SoftLimit = 20;
                 args.HardLimit = 100;
                 args.MaxBufTimeMilliseconds = 10000;
+                args.FullExport = false;
                 return args;
             }
         }
@@ -629,7 +630,7 @@ namespace cuvis_net
             SoftLimit = sa.soft_limit;
             HardLimit = sa.hard_limit;
             MaxBufTimeMilliseconds = sa.max_buftime;
-
+            FullExport = sa.full_export > 0;
         }
 
         internal cuvis_save_args_t GetInternal()
@@ -645,6 +646,7 @@ namespace cuvis_net
             sa.soft_limit = SoftLimit;
             sa.hard_limit = HardLimit;
             sa.max_buftime = MaxBufTimeMilliseconds;
+            sa.full_export = (FullExport ? 1 : 0);
             return sa;
         }
     }
