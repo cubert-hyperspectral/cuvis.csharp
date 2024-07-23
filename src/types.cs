@@ -337,39 +337,47 @@ namespace cuvis_net
     public struct WorkerArgs
     {
 
-        public uint WorkerCount { get; set; }
+        public ulong InputQueueSize { get; set; }
+        public ulong OutputQueueSize { get; set; }
+        public ulong MandatoryQueueSize { get; set; }
+        public ulong SupplementaryQueueSize { get; set; }
 
-        public int PollIntervallInMs { get; set; }
-        public int QueueHardLimit { get; set; }
-        public int QueueSoftLimit { get; set; }
-        public bool CanDrop { get; set; }
+        public bool CanSkipMeasurements { get; set; }
+        public bool CanDropResults { get; set; }
+        public bool CanSkipSupplementarySteps { get; set; }
 
-        public WorkerArgs(uint workerCount, int pollIntervallInMs, int queueHardLimit, int queueSoftLimit, bool canDrop)
+        public WorkerArgs(bool canDropResults = false, bool canSkipMeasurements = false, bool canSkipSupplementarySteps = true, ulong inputQueueSize = 10, ulong outputQueueSize = 10, ulong mandatoryQueueSize = 4, ulong supplementaryQueueSize = 4)
         {
-            WorkerCount = workerCount;
-            PollIntervallInMs = pollIntervallInMs;
-            QueueHardLimit = queueHardLimit;
-            QueueSoftLimit = queueSoftLimit;
-            CanDrop = canDrop;
+            CanSkipMeasurements = canSkipMeasurements;       // Worker cannot skip exporting measurements
+            CanSkipSupplementarySteps = canSkipSupplementarySteps; // Worker can skip view generation
+            CanDropResults = canDropResults;             // Worker can drop results from the output queue, if it is full
+            InputQueueSize = inputQueueSize;
+            OutputQueueSize = outputQueueSize;
+            MandatoryQueueSize = mandatoryQueueSize;
+            SupplementaryQueueSize = supplementaryQueueSize;
         }
 
         internal WorkerArgs(cuvis_worker_settings_t ws)
         {
-            WorkerCount = (uint)ws.worker_count;
-            PollIntervallInMs = ws.poll_interval;
-            QueueHardLimit = ws.worker_queue_hard_limit;
-            QueueSoftLimit = ws.worker_queue_soft_limit;
-            CanDrop = ws.can_drop > 0;
+            CanSkipMeasurements = ws.can_skip_measurements != 0;       // Worker cannot skip exporting measurements
+            CanSkipSupplementarySteps = ws.can_skip_supplementary_steps != 0; // Worker can skip view generation
+            CanDropResults = ws.can_drop_results != 0;             // Worker can drop results from the output queue, if it is full
+            InputQueueSize = ws.input_queue_size;
+            OutputQueueSize = ws.output_queue_size;
+            MandatoryQueueSize = ws.mandatory_queue_size;
+            SupplementaryQueueSize = ws.supplementary_queue_size;
         }
 
         internal cuvis_worker_settings_t GetInternal()
         {
             cuvis_worker_settings_t ws = new cuvis_worker_settings_t();
-            ws.worker_count = (int)WorkerCount;
-            ws.poll_interval = (int)PollIntervallInMs;
-            ws.worker_queue_hard_limit = QueueHardLimit;
-            ws.worker_queue_soft_limit = QueueSoftLimit;
-            ws.can_drop = (CanDrop ? 1 : 0);
+            ws.can_skip_measurements = CanSkipMeasurements ? 1 : 0;
+            ws.can_skip_supplementary_steps = CanSkipSupplementarySteps ? 1 : 0;
+            ws.can_drop_results = CanDropResults ? 1 : 0;
+            ws.input_queue_size = InputQueueSize;
+            ws.output_queue_size = OutputQueueSize;
+            ws.mandatory_queue_size = MandatoryQueueSize;
+            ws.supplementary_queue_size = SupplementaryQueueSize;
             return ws;
         }
     }
@@ -404,6 +412,46 @@ namespace cuvis_net
         }
 
 
+    }
+
+
+    public struct WorkerState
+    {
+        public ulong MeasurementsInQueue { get; set; }
+
+        public ulong SessionFilesInQueue { get; set; }
+
+        public ulong FramesInQueue { get; set; }
+
+        public ulong MeasurementsBeingProcessed { get; set; }
+
+        public ulong ResultsInQueue { get; set; }
+
+        public bool HasAcquisitionContext { get; set; }
+
+        public bool IsProcessing { get; set; }
+
+        public WorkerState(ulong measurementsInQueue, ulong sessionFilesInQueue, ulong framesInQueue, ulong resultsInQueue, ulong measurementsBeingProcessed, bool hasAcquisitionContext, bool isProcessing)
+        {
+            MeasurementsInQueue = measurementsInQueue;
+            SessionFilesInQueue = sessionFilesInQueue;
+            FramesInQueue = framesInQueue;
+            MeasurementsBeingProcessed = measurementsBeingProcessed;
+            ResultsInQueue = resultsInQueue;
+            HasAcquisitionContext = hasAcquisitionContext;
+            IsProcessing = isProcessing;
+        }
+
+        internal WorkerState(cuvis_worker_state_t ws)
+        {
+            MeasurementsInQueue = ws.measurementsInQueue;
+            SessionFilesInQueue = ws.sessionFilesInQueue;
+            FramesInQueue = ws.framesInQueue;
+            MeasurementsBeingProcessed = ws.measurementsBeingProcessed;
+            ResultsInQueue = ws.resultsInQueue;
+            HasAcquisitionContext = ws.hasAcquisitionContext != 0;
+            IsProcessing = ws.isProcessing != 0;
+        }
     }
 
     public class SensorInfo : Data

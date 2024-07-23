@@ -60,9 +60,10 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_event_acquisition_data_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_event_base_data_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_event_component_data_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_event_processing_event_t.cs
-${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_event_qualitiy_event_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_event_quality_event_t.cs
 #${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/EventCallback.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_worker_settings_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_worker_state_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_session_item_type_t.cs
 )
 
