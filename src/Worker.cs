@@ -30,7 +30,7 @@ namespace cuvis_net
         {
             ResetWorkerCallback();
 
-            WorkerState ws = new WorkerState(callback, concurrency, this);
+            WorkerCallbackState ws = new WorkerCallbackState(callback, concurrency, this);
 
             workerThreadRun = true;
             workerThread = new Thread(new ThreadStart(ws.Process));
@@ -46,13 +46,13 @@ namespace cuvis_net
             }
         }
 
-        private class WorkerState
+        private class WorkerCallbackState
         {
             WorkerCallback callback;
             uint concurrency;
             Worker parent;
 
-            public WorkerState(WorkerCallback callback, uint concurrency, Worker parent)
+            public WorkerCallbackState(WorkerCallback callback, uint concurrency, Worker parent)
             {
                 this.callback = callback;
                 this.concurrency = concurrency;
@@ -183,11 +183,11 @@ namespace cuvis_net
             }
         }
 
-        System.Tuple<Measurement,ViewResult> GetNextMeasurement()
+        System.Tuple<Measurement, ViewResult> GetNextMeasurement(ulong timeout_ms = 0)
         {
             var cur_mesu = cuvis_il.new_p_int();
             var cur_view = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_next_result(handle_, cur_mesu, cur_view, -1))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_next_result(handle_, cur_mesu, cur_view, timeout_ms))
             {
                 throw new SDK_Exception();
             }
@@ -196,54 +196,12 @@ namespace cuvis_net
             return new System.Tuple<Measurement, ViewResult>(mesu, view);
         }
 
-        public int QueueHardLimit
+        public bool Processing
         {
             get
             {
                 var val = cuvis_il.new_p_int();
-                var valb = cuvis_il.new_p_int();
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_queue_limits(handle_, val, valb))
-                {
-                    throw new SDK_Exception();
-                }
-                return cuvis_il.p_int_value(val);
-            }
-            set
-            {
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_set_queue_limits(handle_, value, QueueSoftLimit))
-                {
-                    throw new SDK_Exception();
-                }
-            }
-        }
-
-        public int QueueSoftLimit
-        {
-            get
-            {
-                var val = cuvis_il.new_p_int();
-                var valb = cuvis_il.new_p_int();
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_queue_limits(handle_, valb, val))
-                {
-                    throw new SDK_Exception();
-                }
-                return cuvis_il.p_int_value(val);
-            }
-            set
-            {
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_set_queue_limits(handle_, QueueHardLimit, value))
-                {
-                    throw new SDK_Exception();
-                }
-            }
-        }
-
-        public bool CanDrop
-        {
-            get
-            {
-                var val = cuvis_il.new_p_int();
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_drop_behavior(handle_, val))
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_is_processing(handle_, val))
                 {
                     throw new SDK_Exception();
                 }
@@ -251,10 +209,134 @@ namespace cuvis_net
             }
             set
             {
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_set_drop_behavior(handle_, value ? 1 : 0))
+                if (value)
+                {
+                    if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_start(handle_))
+                    {
+                        throw new SDK_Exception();
+                    }
+                }
+                else
+                {
+                    if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_stop(handle_))
+                    {
+                        throw new SDK_Exception();
+                    }
+                }
+            }
+        }
+
+        public WorkerState State
+        {
+            get
+            {
+                var val = cuvis_il.new_p_cuvis_worker_state_t();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_state(handle_, val))
                 {
                     throw new SDK_Exception();
                 }
+
+                return new WorkerState(cuvis_il.p_cuvis_worker_state_t_value(val));
+            }
+        }
+
+        public int ThreadsBusy
+        {
+            get
+            {
+                var val = cuvis_il.new_p_int();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_threads_busy(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_int_value(val);
+            }
+        }
+
+        public ulong InputQueueLimit
+        {
+            get
+            {
+                var val = cuvis_il.new_p_ulong();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_input_queue_limit(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_ulong_value(val);
+            }
+        }
+
+        public ulong OutputQueueLimit
+        {
+            get
+            {
+                var val = cuvis_il.new_p_ulong();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_output_queue_limit(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_ulong_value(val);
+            }
+        }
+        public ulong MandatoryQueueLimit
+        {
+            get
+            {
+                var val = cuvis_il.new_p_ulong();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_mandatory_queue_limit(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_ulong_value(val);
+            }
+        }
+        public ulong SupplementaryQueueLimit
+        {
+            get
+            {
+                var val = cuvis_il.new_p_ulong();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_supplementary_queue_limit(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_ulong_value(val);
+            }
+        }
+
+        public bool CanDropResults
+        {
+            get
+            {
+                var val = cuvis_il.new_p_int();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_can_drop_results(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_int_value(val) != 0;
+            }
+        }
+        public bool CanSkipMeasurments
+        {
+            get
+            {
+                var val = cuvis_il.new_p_int();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_can_skip_measurements(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_int_value(val) != 0;
+            }
+        }
+        public bool CanSkipSupplementarySteps
+        {
+            get
+            {
+                var val = cuvis_il.new_p_int();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_worker_get_can_skip_supplementary(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_int_value(val) != 0;
             }
         }
 
@@ -290,6 +372,8 @@ namespace cuvis_net
             ResetWorkerCallback();
 
             var pHandle = cuvis_il.new_p_int();
+            cuvis_il.cuvis_worker_stop(handle_);
+            cuvis_il.cuvis_worker_drop_all_queued(handle_);
             cuvis_il.p_int_assign(pHandle, handle_);
             cuvis_il.cuvis_worker_free(pHandle);
             handle_ = cuvis_il.p_int_value(pHandle);
