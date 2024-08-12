@@ -50,17 +50,24 @@ namespace cuvis_net
             return new Measurement(mesuHandle);
         }
 
-
         public int GetSize(SessionItemType type = SessionItemType.Frames)
         {
-
             SWIGTYPE_p_int val = cuvis_il.new_p_int();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_size(handle_, (cuvis_session_item_type_t)type, val))
             {
                 throw new SDK_Exception();
             }
             return cuvis_il.p_int_value(val);
+        }
 
+        public cuvis_imbuffer_t GetThumbnail()
+        {
+            var thumbnail = new cuvis_imbuffer_t();
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_session_file_get_thumbnail(handle_, thumbnail))
+            {
+                throw new SDK_Exception();
+            }
+            return thumbnail;
         }
 
         public Measurement this[int index]

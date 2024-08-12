@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace cuvis_net
 {
@@ -75,6 +76,18 @@ namespace cuvis_net
         public string ID
         {
             get { return cuvis_il.cuvis_calib_get_id_swig(handle_); }
+        }
+
+        public cuvis_calibration_info_t Info
+        {
+            get {
+                var info = new cuvis_calibration_info_t();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_calib_get_info(handle_, info))
+                {
+                    throw new SDK_Exception();
+                }
+                return info;
+            }
         }
     }
 

@@ -27,6 +27,10 @@ namespace cuvis_net
 
             disposed = true;
         }
+        protected virtual void Flush()
+        {
+            cuvis_il.cuvis_exporter_flush(handle_);
+        }
 
         public void Dispose()
         {
