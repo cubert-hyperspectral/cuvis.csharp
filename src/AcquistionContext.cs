@@ -242,11 +242,11 @@ namespace cuvis_net
             return new Async(cuvis_il.p_int_value(pAsync));
         }
 
-        public bool PreviewMode
+        public bool Binning
         {
             set
             {
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_preview_mode_set(handle_, value ? 1 : 0))
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_binning_set(handle_, value ? 1 : 0))
                 {
                     throw new SDK_Exception();
                 }
@@ -254,7 +254,7 @@ namespace cuvis_net
             get
             {
                 SWIGTYPE_p_int val = cuvis_il.new_p_int();
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_preview_mode_get(handle_, val))
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_binning_get(handle_, val))
                 {
                     throw new SDK_Exception();
                 }
@@ -262,10 +262,10 @@ namespace cuvis_net
             }
         }
 
-        public Async PreviewModeAsync(bool value)
+        public Async BinningAsync(bool value)
         {
             var pAsync = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_preview_mode_set_async(handle_, pAsync, value ? 1 : 0))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_binning_set_async(handle_, pAsync, value ? 1 : 0))
             {
                 throw new SDK_Exception();
             }
@@ -389,6 +389,49 @@ namespace cuvis_net
                 cuvis_il.cuvis_acq_cont_average_get(handle_, val);
                 return cuvis_il.p_int_value(val);
             }
+        }
+
+        //public string PixelFormat[int id]
+        //{
+        //    set
+        //    {
+        //        cuvis_il.cuvis_acq_cont_average_set(handle_, value);
+        //    }
+        //    get
+        //    {
+        //        var val = cuvis_il.new_p_int();
+        //        cuvis_il.cuvis_acq_cont_average_get(handle_, val);
+        //        return cuvis_il.p_int_value(val);
+        //    }
+        //}
+
+        public void SetPixelFormatAsync(int id, string format)
+        {
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_set_pixel_format(handle_, id, format))
+            {
+                throw new SDK_Exception();
+            }
+        }
+
+        public string GetPixelFormat(int id)
+        {
+            return cuvis_il.cuvis_acq_cont_get_pixel_format_swig(handle_, id);
+        }
+
+        public List<string> GetAvailablePixelFormats(int id)
+        {
+            var count = cuvis_il.new_p_int();
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_get_available_pixel_format_count(handle_, id, count))
+            {
+                throw new SDK_Exception();
+            }
+
+            List<string> formats = [];
+            for(int i = 0; i < cuvis_il.p_int_value(count); i++)
+            {
+                formats.Add(cuvis_il.cuvis_acq_cont_get_pixel_format_swig(handle_, i));
+            }
+            return formats;
         }
 
         public Async SetAverageAsync(int value)
