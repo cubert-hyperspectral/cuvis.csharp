@@ -405,12 +405,15 @@ namespace cuvis_net
         //    }
         //}
 
-        public void SetPixelFormatAsync(int id, string format)
+        public Async SetPixelFormat(int id, string format)
         {
+            var pAsync = cuvis_il.new_p_int();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_comp_pixel_format_set(handle_, id, format))
             {
                 throw new SDK_Exception();
             }
+
+            return new Async(cuvis_il.p_int_value(pAsync));
         }
 
         public string GetPixelFormat(int id)
