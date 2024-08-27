@@ -407,7 +407,7 @@ namespace cuvis_net
 
         public void SetPixelFormatAsync(int id, string format)
         {
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_set_pixel_format(handle_, id, format))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_comp_pixel_format_set(handle_, id, format))
             {
                 throw new SDK_Exception();
             }
@@ -415,13 +415,13 @@ namespace cuvis_net
 
         public string GetPixelFormat(int id)
         {
-            return cuvis_il.cuvis_acq_cont_get_pixel_format_swig(handle_, id);
+            return cuvis_il.cuvis_comp_pixel_format_get_swig(handle_, id);
         }
 
         public List<string> GetAvailablePixelFormats(int id)
         {
             var count = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_get_available_pixel_format_count(handle_, id, count))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_comp_available_pixel_format_count_get(handle_, id, count))
             {
                 throw new SDK_Exception();
             }
@@ -429,7 +429,7 @@ namespace cuvis_net
             List<string> formats = [];
             for(int i = 0; i < cuvis_il.p_int_value(count); i++)
             {
-                formats.Add(cuvis_il.cuvis_acq_cont_get_pixel_format_swig(handle_, i));
+                formats.Add(cuvis_il.cuvis_comp_pixel_format_get_swig(handle_, i));
             }
             return formats;
         }
