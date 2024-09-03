@@ -457,13 +457,15 @@ namespace cuvis_net
     public class SensorInfo : Data
     {
 
-        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttime, ulong frame_id)
+        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttime, ulong frame_id, string pixel_format, bool binning)
         {
             Averages = averages;
             Temperature = temperature;
             Gain = gain;
             ReadOutTime = readouttime;
             RawFrameID = frame_id;
+            Binning = binning;
+            PixelFormat = pixel_format;
         }
 
         internal SensorInfo(cuvis_sensor_info_t si)
@@ -475,6 +477,8 @@ namespace cuvis_net
             Width = si.width;
             Height = si.height;
             RawFrameID = si.raw_frame_id;
+            PixelFormat = si.pixel_format;
+            Binning = si.binning != 0;
         }
 
         public uint Averages { get; set; }
@@ -490,6 +494,8 @@ namespace cuvis_net
         public DateTime ReadOutTime { get; set; }
 
         public ulong RawFrameID { get; set; }
+        public string PixelFormat { get; set; }
+        public bool Binning { get; set; }
 
     }
 
