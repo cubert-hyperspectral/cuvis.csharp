@@ -9,6 +9,8 @@ namespace cuvis_net
     {
         private bool stateCheckRun = false;
         private Thread stateCheckThread = null;
+        private bool readyCheckRun = false;
+        private Thread readyCheckThread = null;
 
         internal int handle_ = 0;
 
@@ -69,6 +71,14 @@ namespace cuvis_net
                     throw new SDK_Exception();
                 }
                 return (HardwareState)cuvis_il.p_cuvis_hardware_state_t_value(val);
+            }
+        }
+
+        public Boolean Ready
+        {
+            get
+            {
+                return GetIsReady();
             }
         }
 
@@ -482,6 +492,13 @@ namespace cuvis_net
             int value = cuvis_il.p_int_value(val);
             return value == 1;
         }
+        public bool GetIsReady()
+        {
+            var val = cuvis_il.new_p_int();
+            cuvis_il.cuvis_acq_cont_ready_get(handle_, val);
+            int value = cuvis_il.p_int_value(val);
+            return value == 1;
+        }
 
         public double GetGain(int id)
         {
@@ -576,6 +593,61 @@ namespace cuvis_net
         {
             Dispose(disposing: false);
         }
+
+        #region Ready Callback
+
+        public void RegisterReadyCallback(ReadyCallback callback)
+        {
+            ResetReadyCallback();
+
+            CheckReady cs = new CheckReady(callback, this);
+
+            readyCheckRun = true;
+
+            readyCheckThread = new Thread(new ThreadStart(cs.Process));
+            readyCheckThread.Start();
+        }
+
+        public void ResetReadyCallback()
+        {
+            readyCheckRun = false;
+            if (readyCheckThread != null)
+            {
+                readyCheckThread.Join();
+            }
+        }
+
+        public delegate void ReadyCallback();
+        private class CheckReady
+        {
+            ReadyCallback callback;
+            AcquistionContext parent;
+            bool outputInitial;
+
+            public CheckReady(ReadyCallback callback, AcquistionContext parent)
+            {
+                this.callback = callback;
+                this.parent = parent;
+            }
+            public void Process()
+            {
+                int pollTimeMs = 500;
+
+                while (parent.readyCheckRun)
+                {
+                    if (parent.GetIsReady())
+                    {
+                        callback();
+                    }
+                    else
+                    {
+                        Thread.Sleep(pollTimeMs);
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region State Callback
 
