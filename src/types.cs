@@ -571,7 +571,7 @@ namespace cuvis_net
             AddFullscalePan = ge.add_fullscale_pan > 0;
             Permissive = ge.permissive > 0;
             BlendOpacity = ge.blend_opacity;
-            PrePansharpen = ge.pre_pansharpen_cube > 0;
+            PrePansharpen = ge.pre_pan_sharpen_cube > 0;
         }
 
         internal cuvis_export_general_settings_t GetInternal()
@@ -587,7 +587,7 @@ namespace cuvis_net
             ge.add_fullscale_pan = (AddFullscalePan ? 1 : 0);
             ge.permissive = (Permissive ? 1 : 0);
             ge.blend_opacity = BlendOpacity;
-            ge.pre_pansharpen_cube = (PrePansharpen ? 1 : 0);
+            ge.pre_pan_sharpen_cube = (PrePansharpen ? 1 : 0);
             return ge;
         }
     }
