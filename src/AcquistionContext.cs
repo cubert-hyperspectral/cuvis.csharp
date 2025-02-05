@@ -74,7 +74,7 @@ namespace cuvis_net
             }
         }
 
-        public Boolean Ready
+        public bool Ready
         {
             get
             {
