@@ -490,14 +490,14 @@ namespace cuvis_net
             var val = cuvis_il.new_p_int();
             cuvis_il.cuvis_comp_online_get(handle_, id, val);
             int value = cuvis_il.p_int_value(val);
-            return value == 1;
+            return value != 0;
         }
         public bool GetIsReady()
         {
             var val = cuvis_il.new_p_int();
             cuvis_il.cuvis_acq_cont_ready_get(handle_, val);
             int value = cuvis_il.p_int_value(val);
-            return value == 1;
+            return value != 0;
         }
 
         public double GetGain(int id)
@@ -638,6 +638,7 @@ namespace cuvis_net
                     if (parent.GetIsReady())
                     {
                         callback();
+                        parent.readyCheckRun = false;
                     }
                     else
                     {
