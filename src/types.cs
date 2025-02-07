@@ -522,6 +522,7 @@ namespace cuvis_net
         public bool Permissive { get; set; }
 
         public double BlendOpacity { get; set; }
+        public bool PrePansharpen { get; set; }
 
         public static GeneralExportSettings Default
         {
@@ -538,11 +539,12 @@ namespace cuvis_net
                 args.AddFullscalePan = false;
                 args.Permissive = false;
                 args.BlendOpacity = 0.0;
+                args.PrePansharpen = false;
                 return args;
             }
         }
 
-        public GeneralExportSettings(string exportDir, string channelSelection, byte spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
+        public GeneralExportSettings(string exportDir, string channelSelection, byte spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool prePansharpen, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
         {
             ExportDir = exportDir;
             ChannelSelection = channelSelection;
@@ -554,6 +556,7 @@ namespace cuvis_net
             AddFullscalePan = addFullscalePan;
             Permissive = permissive;
             BlendOpacity = blendOpacity;
+            PrePansharpen = prePansharpen;
         }
 
         internal GeneralExportSettings(cuvis_export_general_settings_t ge)
@@ -568,6 +571,7 @@ namespace cuvis_net
             AddFullscalePan = ge.add_fullscale_pan > 0;
             Permissive = ge.permissive > 0;
             BlendOpacity = ge.blend_opacity;
+            PrePansharpen = ge.pre_pan_sharpen_cube > 0;
         }
 
         internal cuvis_export_general_settings_t GetInternal()
@@ -583,6 +587,7 @@ namespace cuvis_net
             ge.add_fullscale_pan = (AddFullscalePan ? 1 : 0);
             ge.permissive = (Permissive ? 1 : 0);
             ge.blend_opacity = BlendOpacity;
+            ge.pre_pan_sharpen_cube = (PrePansharpen ? 1 : 0);
             return ge;
         }
     }
