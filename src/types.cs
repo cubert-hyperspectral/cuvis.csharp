@@ -300,7 +300,8 @@ namespace cuvis_net
         WhiteIntTime = 32,
         WhiteTemp = 64,
         WhiteDarkIntTime = 128,
-        WhiteDarkTemp = 256
+        WhiteDarkTemp = 256,
+        PanOverilluminated = 512
     }
 
     public static class MeasurementFlagConversion
