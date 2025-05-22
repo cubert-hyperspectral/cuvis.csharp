@@ -53,6 +53,10 @@ namespace cuvis_net
             {
                 throw new SDK_Exception();
             }
+            if(cuvis_status_t.status_ok != cuvis_il.cuvis_exporter_flush(handle_))
+            {
+                throw new SDK_Exception();
+            }
             return mesu;
         }
     }
