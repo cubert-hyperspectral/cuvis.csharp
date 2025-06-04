@@ -58,10 +58,10 @@ namespace cuvis_net
             }
         }
 
-        public static void Init(string settings_path, LogLevel global_loglevel = LogLevel.debug)
+        public static void Init(string settings_path, LogLevel global_loglevel = LogLevel.debug, string logfile_name = "")
         {
 
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path, (int)global_loglevel))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path, (int)global_loglevel, logfile_name))
             {
                 throw new SDK_Exception();
             }
