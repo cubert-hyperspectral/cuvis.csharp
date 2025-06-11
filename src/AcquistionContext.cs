@@ -252,37 +252,6 @@ namespace cuvis_net
             return new Async(cuvis_il.p_int_value(pAsync));
         }
 
-        public bool Binning
-        {
-            set
-            {
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_binning_set(handle_, value ? 1 : 0))
-                {
-                    throw new SDK_Exception();
-                }
-            }
-            get
-            {
-                SWIGTYPE_p_int val = cuvis_il.new_p_int();
-                if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_binning_get(handle_, val))
-                {
-                    throw new SDK_Exception();
-                }
-                return cuvis_il.p_int_value(val) > 0;
-            }
-        }
-
-        public Async BinningAsync(bool value)
-        {
-            var pAsync = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_acq_cont_binning_set_async(handle_, pAsync, value ? 1 : 0))
-            {
-                throw new SDK_Exception();
-            }
-
-            return new Async(cuvis_il.p_int_value(pAsync));
-        }
-
         public double IntegrationTime
         {
             set
