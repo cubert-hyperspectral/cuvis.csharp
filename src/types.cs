@@ -642,14 +642,14 @@ namespace cuvis_net
         internal ViewExportSettings(cuvis_export_view_settings_t vs)
         {
             Userplugin = vs.userplugin;
-            PanFailback = vs.pan_failback;
+            PanFailback = vs.pan_failback > 0;
         }
 
         internal cuvis_export_view_settings_t GetInternal()
         {
             cuvis_export_view_settings_t vs = new cuvis_export_view_settings_t();
             vs.userplugin = Userplugin;
-            vs.pan_failback = PanFailback;
+            vs.pan_failback = PanFailback ? 1 : 0;
             return vs;
         }
     }
