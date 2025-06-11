@@ -625,21 +625,31 @@ namespace cuvis_net
     public struct ViewExportSettings
     {
         string Userplugin { get; set; }
+        bool PanFailback { get; set; }
 
         public ViewExportSettings(string userplugin)
         {
             Userplugin = userplugin;
+            PanFailback = true;
+        }
+
+        public ViewExportSettings(string userplugin, bool pan_failback)
+        {
+            Userplugin = userplugin;
+            PanFailback = pan_failback;
         }
 
         internal ViewExportSettings(cuvis_export_view_settings_t vs)
         {
             Userplugin = vs.userplugin;
+            PanFailback = vs.pan_failback;
         }
 
         internal cuvis_export_view_settings_t GetInternal()
         {
             cuvis_export_view_settings_t vs = new cuvis_export_view_settings_t();
             vs.userplugin = Userplugin;
+            vs.pan_failback = PanFailback;
             return vs;
         }
     }
