@@ -448,7 +448,6 @@ namespace cuvis_net
 
         public ComponentInfo GetComponentInfo(int id)
         {
-            var val = cuvis_il.new_p_int();
             cuvis_component_info_t ci = new cuvis_component_info_t();
             cuvis_il.cuvis_acq_cont_get_component_info(handle_, id, ci);
             return new ComponentInfo(ci);
