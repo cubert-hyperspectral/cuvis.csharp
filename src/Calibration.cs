@@ -89,6 +89,26 @@ namespace cuvis_net
                 return info;
             }
         }
+
+        public int ComponentCount
+        {
+            get
+            {
+                var val = cuvis_il.new_p_int();
+                if (cuvis_status_t.status_ok != cuvis_il.cuvis_calib_get_component_count(handle_, val))
+                {
+                    throw new SDK_Exception();
+                }
+                return cuvis_il.p_int_value(val);
+            }
+        }
+
+        public ComponentInfo GetComponentInfo(int id)
+        {
+            cuvis_component_info_t ci = new cuvis_component_info_t();
+            cuvis_il.cuvis_calib_get_component_info(handle_, id, ci);
+            return new ComponentInfo(ci);
+        }
     }
 
 

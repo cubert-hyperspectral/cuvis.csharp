@@ -58,10 +58,10 @@ namespace cuvis_net
             }
         }
 
-        public static void Init(string settings_path, LogLevel global_loglevel = LogLevel.debug)
+        public static void Init(string settings_path, LogLevel global_loglevel = LogLevel.debug, string logfile_name = "")
         {
 
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path, (int)global_loglevel))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_init(settings_path, (int)global_loglevel, logfile_name))
             {
                 throw new SDK_Exception();
             }
@@ -458,7 +458,7 @@ namespace cuvis_net
     public class SensorInfo : Data
     {
 
-        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttime, ulong frame_id, string pixel_format, bool binning)
+        public SensorInfo(uint averages, double temperature, double gain, DateTime readouttime, ulong frame_id, string pixel_format, bool binning, double integration_time)
         {
             Averages = averages;
             Temperature = temperature;
@@ -467,6 +467,7 @@ namespace cuvis_net
             RawFrameID = frame_id;
             Binning = binning;
             PixelFormat = pixel_format;
+            IntegrationTime = integration_time;
         }
 
         internal SensorInfo(cuvis_sensor_info_t si)
@@ -479,7 +480,7 @@ namespace cuvis_net
             Height = si.height;
             RawFrameID = si.raw_frame_id;
             PixelFormat = si.pixel_format;
-            Binning = si.binning != 0;
+            IntegrationTime = si.integration_time;
         }
 
         public uint Averages { get; set; }
@@ -497,6 +498,7 @@ namespace cuvis_net
         public ulong RawFrameID { get; set; }
         public string PixelFormat { get; set; }
         public bool Binning { get; set; }
+        public double IntegrationTime { get; set; }
 
     }
 
@@ -623,21 +625,31 @@ namespace cuvis_net
     public struct ViewExportSettings
     {
         string Userplugin { get; set; }
+        bool PanFailback { get; set; }
 
         public ViewExportSettings(string userplugin)
         {
             Userplugin = userplugin;
+            PanFailback = true;
+        }
+
+        public ViewExportSettings(string userplugin, bool pan_failback)
+        {
+            Userplugin = userplugin;
+            PanFailback = pan_failback;
         }
 
         internal ViewExportSettings(cuvis_export_view_settings_t vs)
         {
             Userplugin = vs.userplugin;
+            PanFailback = vs.pan_failback > 0;
         }
 
         internal cuvis_export_view_settings_t GetInternal()
         {
             cuvis_export_view_settings_t vs = new cuvis_export_view_settings_t();
             vs.userplugin = Userplugin;
+            vs.pan_failback = PanFailback ? 1 : 0;
             return vs;
         }
     }
