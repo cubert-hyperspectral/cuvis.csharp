@@ -186,6 +186,12 @@ namespace cuvis_net
         References = cuvis_session_item_type_t.session_item_type_references
     };
 
+    public enum SessionMergeMode {
+        Default = cuvis_session_merge_mode_t.session_merge_mode_Default,
+        Fragmentation = cuvis_session_merge_mode_t.session_merge_mode_Fragmentation,
+        Merge = cuvis_session_merge_mode_t.session_merge_mode_Merge
+    };
+
     public enum PanSharpeningInterpolationType
     {
         NearestNeighbour = cuvis_pan_sharpening_interpolation_type_t.pan_sharpening_interpolation_type_NearestNeighbor,
@@ -656,7 +662,7 @@ namespace cuvis_net
 
     public struct SaveArgs
     {
-        public bool AllowFragmentation { get; set; }
+        public cuvis_net.SessionMergeMode MergeMode { get; set; }
         public bool AllowOverride { get; set; }
         public bool AllowDrop { get; set; }
         public bool AllowSessionFile { get; set; }
@@ -674,7 +680,7 @@ namespace cuvis_net
             get
             {
                 SaveArgs args = new SaveArgs();
-                args.AllowFragmentation = false;
+                args.MergeMode = SessionMergeMode.Default;
                 args.AllowOverride = false;
                 args.AllowDrop = false;
                 args.AllowSessionFile = true;
@@ -692,7 +698,7 @@ namespace cuvis_net
 
         internal SaveArgs(cuvis_save_args_t sa)
         {
-            AllowFragmentation = sa.allow_fragmentation > 0;
+            MergeMode = (cuvis_net.SessionMergeMode)sa.merge_mode;
             AllowOverride = sa.allow_overwrite > 0;
             AllowDrop = sa.allow_drop > 0;
             AllowSessionFile = sa.allow_session_file > 0;
@@ -708,7 +714,7 @@ namespace cuvis_net
         internal cuvis_save_args_t GetInternal()
         {
             cuvis_save_args_t sa = new cuvis_save_args_t();
-            sa.allow_fragmentation = (AllowFragmentation ? 1 : 0);
+            sa.merge_mode = (cuvis_session_merge_mode_t)MergeMode;
             sa.allow_overwrite = (AllowOverride ? 1 : 0);
             sa.allow_drop = (AllowDrop ? 1 : 0);
             sa.allow_session_file = (AllowSessionFile ? 1 : 0);

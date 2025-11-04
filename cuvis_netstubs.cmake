@@ -66,6 +66,7 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_event_quality_event_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_worker_settings_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_worker_state_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_session_item_type_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_session_merge_mode_t.cs
 )
 
 
