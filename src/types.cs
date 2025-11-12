@@ -205,7 +205,7 @@ namespace cuvis_net
         Noop = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_Noop,
         PanRatio = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_CubertPanRatio,
         CubertMacroPixel = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_CubertMacroPixel,
-        AlphaBlend = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_AlphablendPanOverlay
+        AlphaBlend = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_PCAFusion
     }
 
     public enum TiffCompressionMode
@@ -579,7 +579,6 @@ namespace cuvis_net
             AddPan = ge.add_pan > 0;
             AddFullscalePan = ge.add_fullscale_pan > 0;
             Permissive = ge.permissive > 0;
-            BlendOpacity = ge.blend_opacity;
             PrePansharpen = ge.pre_pan_sharpen_cube > 0;
         }
 
@@ -595,7 +594,6 @@ namespace cuvis_net
             ge.add_pan = (AddPan ? 1 : 0);
             ge.add_fullscale_pan = (AddFullscalePan ? 1 : 0);
             ge.permissive = (Permissive ? 1 : 0);
-            ge.blend_opacity = BlendOpacity;
             ge.pre_pan_sharpen_cube = (PrePansharpen ? 1 : 0);
             return ge;
         }
