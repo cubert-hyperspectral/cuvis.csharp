@@ -18,20 +18,20 @@ namespace cuvis_net
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
-        public ProcessingContext(SessionFile session)
+        public ProcessingContext(SessionFile session, bool load_references = true)
         {
             var pHandle = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_create_from_session_file(session.handle_, pHandle))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_create_from_session_file(session.handle_, load_references ? 1 : 0, pHandle))
             {
                 throw new SDK_Exception();
             }
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
-        public ProcessingContext(Measurement mesu)
+        public ProcessingContext(Measurement mesu, bool load_references = true)
         {
             var pHandle = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_create_from_mesu(mesu.handle_, pHandle))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_create_from_mesu(mesu.handle_, load_references ? 1 : 0, pHandle))
             {
                 throw new SDK_Exception();
             }
