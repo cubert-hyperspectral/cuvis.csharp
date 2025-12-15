@@ -31,6 +31,7 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_component_info_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_calibration_info_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_component_type_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_data_type_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_pansharpening_settings_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_export_general_settings_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_export_tiff_settings_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_export_view_settings_t.cs

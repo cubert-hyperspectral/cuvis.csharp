@@ -205,7 +205,7 @@ namespace cuvis_net
         Noop = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_Noop,
         PanRatio = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_CubertPanRatio,
         CubertMacroPixel = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_CubertMacroPixel,
-        AlphaBlend = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_AlphablendPanOverlay
+        PCAFusion = cuvis_pan_sharpening_algorithm_t.pan_sharpening_algorithm_PCAFusion
     }
 
     public enum TiffCompressionMode
@@ -510,94 +510,123 @@ namespace cuvis_net
 
     #region Export Settings
 
-    public struct GeneralExportSettings
+    public class PanSharpeningSettings
     {
-        public string ExportDir { get; set; }
-
         public string ChannelSelection { get; set; }
-
-        public byte SpectraMultiplier { get; set; }
-
+        public float SpectraMultiplier { get; set; }
         public double PanScale { get; set; }
-
-        public PanSharpeningInterpolationType PanSharpeningInterpolationType { get; set; }
-
-        public PanSharpeningAlgorithm PanSharpeningAlgorithmType { get; set; }
-
+        public PanSharpeningInterpolationType InterpolationType { get; set; }
+        public PanSharpeningAlgorithm AlgorithmType { get; set; }
         public bool AddPan { get; set; }
-
-        public bool AddFullscalePan { get; set; }
-
-        public bool Permissive { get; set; }
-
-        public double BlendOpacity { get; set; }
         public bool PrePansharpen { get; set; }
 
-        public static GeneralExportSettings Default
+        public PanSharpeningSettings(
+            string channelSelection,
+            float spectraMultiplier,
+            double panScale,
+            PanSharpeningInterpolationType interpolationType,
+            PanSharpeningAlgorithm algorithmType,
+            bool prePansharpen,
+            bool addPan)
         {
-            get
-            {
-                GeneralExportSettings args = new GeneralExportSettings();
-                args.ExportDir = ".";
-                args.ChannelSelection = "all";
-                args.SpectraMultiplier = 1;
-                args.PanScale = 0.0;
-                args.PanSharpeningInterpolationType = PanSharpeningInterpolationType.Linear;
-                args.PanSharpeningAlgorithmType = PanSharpeningAlgorithm.CubertMacroPixel;
-                args.AddPan = false;
-                args.AddFullscalePan = false;
-                args.Permissive = false;
-                args.BlendOpacity = 0.0;
-                args.PrePansharpen = false;
-                return args;
-            }
-        }
-
-        public GeneralExportSettings(string exportDir, string channelSelection, byte spectraMultiplier, double panScale, PanSharpeningInterpolationType panSharpeningInterpolationType, PanSharpeningAlgorithm panSharpeningAlgorithmType, bool prePansharpen, bool addPan, bool addFullscalePan, bool permissive, double blendOpacity)
-        {
-            ExportDir = exportDir;
             ChannelSelection = channelSelection;
             SpectraMultiplier = spectraMultiplier;
             PanScale = panScale;
-            PanSharpeningInterpolationType = panSharpeningInterpolationType;
-            PanSharpeningAlgorithmType = panSharpeningAlgorithmType;
-            AddPan = addPan;
-            AddFullscalePan = addFullscalePan;
-            Permissive = permissive;
-            BlendOpacity = blendOpacity;
-            PrePansharpen = prePansharpen;
+            InterpolationType = interpolationType;
+            AlgorithmType = algorithmType;
+            AddPan = prePansharpen;
+            PrePansharpen = addPan;
+        }
+        public PanSharpeningSettings()
+        {}
+
+        public static PanSharpeningSettings Default => new PanSharpeningSettings
+        {
+            ChannelSelection = "all",
+            SpectraMultiplier = 1.0f,
+            PanScale = 0.0,
+            InterpolationType = PanSharpeningInterpolationType.Linear,
+            AlgorithmType = PanSharpeningAlgorithm.CubertMacroPixel,
+            AddPan = false,
+            PrePansharpen = false
+        };
+
+        internal PanSharpeningSettings(cuvis_pansharpening_settings_t native) : this()
+        {
+            ChannelSelection = native.channel_selection;
+            SpectraMultiplier = native.spectra_multiplier;
+            PanScale = native.pan_scale;
+            InterpolationType = (PanSharpeningInterpolationType)native.pan_interpolation_type;
+            AlgorithmType = (PanSharpeningAlgorithm)native.pan_algorithm;
+            AddPan = native.add_pan > 0;
+            PrePansharpen = native.pre_pan_sharpen_cube > 0;
         }
 
-        internal GeneralExportSettings(cuvis_export_general_settings_t ge)
+        internal cuvis_pansharpening_settings_t GetInternal()
         {
-            ExportDir = ge.export_dir;
-            ChannelSelection = ge.channel_selection;
-            SpectraMultiplier = (byte)ge.spectra_multiplier;
-            PanScale = ge.pan_scale;
-            PanSharpeningInterpolationType = (PanSharpeningInterpolationType)ge.pan_interpolation_type;
-            PanSharpeningAlgorithmType = (PanSharpeningAlgorithm)ge.pan_algorithm;
-            AddPan = ge.add_pan > 0;
-            AddFullscalePan = ge.add_fullscale_pan > 0;
-            Permissive = ge.permissive > 0;
-            BlendOpacity = ge.blend_opacity;
-            PrePansharpen = ge.pre_pan_sharpen_cube > 0;
+            var native = new cuvis_pansharpening_settings_t();
+            native.channel_selection = ChannelSelection;
+            native.spectra_multiplier = SpectraMultiplier;
+            native.pan_scale = PanScale;
+            native.pan_interpolation_type = (cuvis_pan_sharpening_interpolation_type_t)InterpolationType;
+            native.pan_algorithm = (cuvis_pan_sharpening_algorithm_t)AlgorithmType;
+            native.add_pan = AddPan ? 1 : 0;
+            native.pre_pan_sharpen_cube = PrePansharpen ? 1 : 0;
+            return native;
+        }
+    }
+
+    public class GeneralExportSettings
+    {
+        public string ExportDir { get; set; }
+        public bool AddFullscalePan { get; set; }
+        public bool Permissive { get; set; }
+
+        public PanSharpeningSettings PanSharpening { get; set; }
+
+        public GeneralExportSettings(string exportDir,
+            PanSharpeningSettings panSharpening,
+            bool addFullScalePan,
+            bool permissive)
+        {
+            ExportDir = exportDir;
+            AddFullscalePan = addFullScalePan;
+            Permissive = permissive;
+            PanSharpening = panSharpening;
+        }
+
+        public static GeneralExportSettings Default => new GeneralExportSettings
+        {
+            ExportDir = ".",
+            AddFullscalePan = false,
+            Permissive = false,
+            PanSharpening = PanSharpeningSettings.Default
+        };
+
+        public GeneralExportSettings()
+        {
+            PanSharpening = PanSharpeningSettings.Default;
+        }
+
+        internal GeneralExportSettings(cuvis_export_general_settings_t native) : this()
+        {
+            ExportDir = native.export_dir;
+            AddFullscalePan = native.add_fullscale_pan > 0;
+            Permissive = native.permissive > 0;
+
+            var psNative = native.pansharpening_settings;
+            if (psNative != null)
+                PanSharpening = new PanSharpeningSettings(psNative);
         }
 
         internal cuvis_export_general_settings_t GetInternal()
         {
-            cuvis_export_general_settings_t ge = new cuvis_export_general_settings_t();
-            ge.export_dir = ExportDir;
-            ge.channel_selection = ChannelSelection;
-            ge.spectra_multiplier = (byte)SpectraMultiplier;
-            ge.pan_scale = PanScale;
-            ge.pan_interpolation_type = (cuvis_pan_sharpening_interpolation_type_t)PanSharpeningInterpolationType;
-            ge.pan_algorithm = (cuvis_pan_sharpening_algorithm_t)PanSharpeningAlgorithmType;
-            ge.add_pan = (AddPan ? 1 : 0);
-            ge.add_fullscale_pan = (AddFullscalePan ? 1 : 0);
-            ge.permissive = (Permissive ? 1 : 0);
-            ge.blend_opacity = BlendOpacity;
-            ge.pre_pan_sharpen_cube = (PrePansharpen ? 1 : 0);
-            return ge;
+            var native = new cuvis_export_general_settings_t();
+            native.export_dir = ExportDir;
+            native.add_fullscale_pan = AddFullscalePan ? 1 : 0;
+            native.permissive = Permissive ? 1 : 0;
+            native.pansharpening_settings = PanSharpening.GetInternal();
+            return native;
         }
     }
 
@@ -625,6 +654,54 @@ namespace cuvis_net
             ts.compression_mode = (cuvis_tiff_compression_mode_t)CompressionMode;
             ts.format = (cuvis_tiff_format_t)Format;
             return ts;
+        }
+    }
+
+    public struct ViewerSettings
+    {
+        string Userplugin { get; set; }
+        bool PanFailback { get; set; }
+        bool Complete { get; set; }
+        public PanSharpeningSettings PanSharpening { get; set; }
+
+        public ViewerSettings(string userplugin)
+        {
+            Userplugin = userplugin;
+            PanFailback = true;
+            Complete = false;
+            PanSharpening = PanSharpeningSettings.Default;
+        }
+
+        public ViewerSettings(string userplugin, bool pan_failback, bool complete,
+            PanSharpeningSettings panSharpening)
+        {
+            Userplugin = userplugin;
+            PanFailback = pan_failback;
+            Complete = complete;
+            PanSharpening = panSharpening;
+        }
+
+        internal ViewerSettings(cuvis_viewer_settings_t vs)
+        {
+            Userplugin = vs.userplugin;
+            PanFailback = vs.pan_failback > 0;
+            Complete = vs.complete > 0;
+
+            var psNative = vs.pansharpening_settings;
+            PanSharpening = psNative != null
+                ? new PanSharpeningSettings(psNative)
+                : PanSharpeningSettings.Default;
+        }
+
+        internal cuvis_viewer_settings_t GetInternal()
+        {
+            cuvis_viewer_settings_t vs = new cuvis_viewer_settings_t();
+            vs.userplugin = Userplugin;
+            vs.pan_failback = PanFailback ? 1 : 0;
+            vs.complete = Complete ? 1 : 0;
+            var psNative = PanSharpening.GetInternal();
+            vs.pansharpening_settings = psNative;
+            return vs;
         }
     }
 

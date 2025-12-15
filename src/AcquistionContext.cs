@@ -432,8 +432,34 @@ namespace cuvis_net
             set
             {
                 cuvis_il.cuvis_acq_cont_continuous_set(handle_, value ? 1 : 0);
+          }
+        }
+
+        public bool DeadPixelCorrectionAvailable()
+        {
+            var val = cuvis_il.new_p_int();
+            cuvis_il.cuvis_acq_cont_dead_pixel_correction_available_get(handle_, val);
+            int value = cuvis_il.p_int_value(val);
+            return value != 0;
+        }
+
+        public bool DeadPixelCorrection
+        {
+            get
+            {
+                var val = cuvis_il.new_p_int();
+                cuvis_il.cuvis_acq_cont_dead_pixel_correction_enabled_get(handle_, val);
+                int value = cuvis_il.p_int_value(val);
+                return value != 0;
+            }
+
+            set
+            {
+                int val = value ? 1 : 0;
+                cuvis_il.cuvis_acq_cont_dead_pixel_correction_enabled_set(handle_, val);
             }
         }
+
 
         public Async SetContinuousAsync(bool value)
         {

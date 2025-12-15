@@ -8,10 +8,10 @@ namespace cuvis_net
     public class Viewer : System.IDisposable
     {
         internal int handle_ = 0;
-        public Viewer(cuvis_viewer_settings_t settings)
+        public Viewer(ViewerSettings settings)
         {
             var pHandle = cuvis_il.new_p_int();
-            if (cuvis_status_t.status_ok != cuvis_il.cuvis_viewer_create(pHandle, settings))
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_viewer_create(pHandle, settings.GetInternal()))
             {
                 throw new SDK_Exception();
             }
