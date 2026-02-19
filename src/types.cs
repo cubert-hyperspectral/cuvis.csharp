@@ -534,8 +534,8 @@ namespace cuvis_net
             PanScale = panScale;
             InterpolationType = interpolationType;
             AlgorithmType = algorithmType;
-            AddPan = prePansharpen;
-            PrePansharpen = addPan;
+            AddPan = addPan;
+            PrePansharpen = prePansharpen;
         }
         public PanSharpeningSettings()
         {}
