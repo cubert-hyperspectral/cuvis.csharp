@@ -1,5 +1,12 @@
 ![image](https://raw.githubusercontent.com/cubert-hyperspectral/cuvis.sdk/main/branding/logo/banner.png)
 
+>**WARNING**\
+>This repository is no longer actively maintained.
+>We no longer offer support or bug fixes for this project.
+>Use at your own discretion. \
+>Last release: 25.02.2026 \
+>Last supported Cuvis version: 3.5.1
+
 # cuvis.csharp
 
 cuvis.csharp is the C# wrapper for the Cuvis SDK written in C ([available here](https://github.com/cubert-hyperspectral/cuvis.sdk)).
