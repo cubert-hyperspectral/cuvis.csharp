@@ -65,13 +65,19 @@ namespace cuvis_net
             {
                 throw new SDK_Exception();
             }
+            IsShutDown = false;
         }
+
+        // Every handle is gone after shutdown and freeing one throws, which is fatal from a finalizer.
+        internal static bool IsShutDown { get; private set; }
+
         public static void Shutdown()
         {
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_shutdown())
             {
                 throw new SDK_Exception();
             }
+            IsShutDown = true;
         }
     }
 
@@ -112,7 +118,10 @@ namespace cuvis_net
         {
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);
-            cuvis_il.cuvis_async_call_free(pHandle);
+            if (!General.IsShutDown)
+            {
+                cuvis_il.cuvis_async_call_free(pHandle);
+            }
             handle_ = cuvis_il.p_int_value(pHandle);
         }
     }
@@ -129,7 +138,10 @@ namespace cuvis_net
         {
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);
-            cuvis_il.cuvis_async_capture_free(pHandle);
+            if (!General.IsShutDown)
+            {
+                cuvis_il.cuvis_async_capture_free(pHandle);
+            }
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
@@ -176,7 +188,9 @@ namespace cuvis_net
         Dark = cuvis_reference_type_t.Reference_Dark,
         WhiteDark = cuvis_reference_type_t.Reference_WhiteDark,
         SpRad = cuvis_reference_type_t.Reference_SpRad,
-        Distance = cuvis_reference_type_t.Reference_Distance
+        Distance = cuvis_reference_type_t.Reference_Distance,
+        WhiteSpectrum = cuvis_reference_type_t.Reference_WhiteSpectrum,
+        TargetSpectrum = cuvis_reference_type_t.Reference_TargetSpectrum
     };
 
     public enum SessionItemType
