@@ -193,6 +193,56 @@ namespace cuvis_net
         TargetSpectrum = cuvis_reference_type_t.Reference_TargetSpectrum
     };
 
+    public class TargetSpectrum
+    {
+        public TargetSpectrum(float[] wavelengths, float[] values)
+        {
+            Spectrum.Validate(wavelengths, values.Length);
+            Wavelengths = wavelengths;
+            Values = values;
+        }
+
+        // nanometers
+        public float[] Wavelengths { get; }
+
+        // reflectance as fractions, 1.0 is 100 percent
+        public float[] Values { get; }
+    }
+
+    public class WhiteSpectrum
+    {
+        public WhiteSpectrum(float[] wavelengths, ushort[] counts, int effectiveBitDepth, double integrationTime = 0.0)
+        {
+            Spectrum.Validate(wavelengths, counts.Length);
+            Wavelengths = wavelengths;
+            Counts = counts;
+            EffectiveBitDepth = effectiveBitDepth;
+            IntegrationTime = integrationTime;
+        }
+
+        // nanometers
+        public float[] Wavelengths { get; }
+
+        public ushort[] Counts { get; }
+
+        // significant bits per count, 1 to 16; counts are meaningless without it
+        public int EffectiveBitDepth { get; }
+
+        // milliseconds
+        public double IntegrationTime { get; }
+    }
+
+    internal static class Spectrum
+    {
+        internal static void Validate(float[] wavelengths, int valueCount)
+        {
+            if (wavelengths.Length == 0 || wavelengths.Length != valueCount)
+            {
+                throw new ArgumentException("A spectrum needs equally many wavelengths and values, and at least one of each.");
+            }
+        }
+    }
+
     public enum SessionItemType
     {
         FramesNoGaps = cuvis_session_item_type_t.session_item_type_frames_no_gaps,
