@@ -106,9 +106,6 @@ set_target_properties(${target_name}
 	LINKER_LANGUAGE CSharp
 	#PROPERTY VS_DOTNET_REFERENCES "System"
 )
-# Note: Modification of compiler flags is required for CLR compatibility now that we are using .resx files.
-string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 
 
 set_target_properties(${target_name} PROPERTIES FOLDER "${projprefix}/dotnet")
