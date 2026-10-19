@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace cuvis_net
@@ -79,6 +80,18 @@ namespace cuvis_net
         public string ID
         {
             get { return cuvis_il.cuvis_calib_get_id_swig(handle_); }
+        }
+
+        // The cube's wavelengths in nanometers; empty when the calibration does not define a grid.
+        public uint[] Wavelengths
+        {
+            get
+            {
+                var info = Info;
+                return info.cube_wavelengths == null
+                    ? new uint[0]
+                    : Enumerable.Range(0, (int)info.cube_channels).Select(i => cuvis_il.p_unsigned_int_getitem(info.cube_wavelengths, i)).ToArray();
+            }
         }
 
         public cuvis_calibration_info_t Info
