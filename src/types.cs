@@ -65,13 +65,19 @@ namespace cuvis_net
             {
                 throw new SDK_Exception();
             }
+            IsShutDown = false;
         }
+
+        // Every handle is gone after shutdown and freeing one throws, which is fatal from a finalizer.
+        internal static bool IsShutDown { get; private set; }
+
         public static void Shutdown()
         {
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_shutdown())
             {
                 throw new SDK_Exception();
             }
+            IsShutDown = true;
         }
     }
 
@@ -112,7 +118,10 @@ namespace cuvis_net
         {
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);
-            cuvis_il.cuvis_async_call_free(pHandle);
+            if (!General.IsShutDown)
+            {
+                cuvis_il.cuvis_async_call_free(pHandle);
+            }
             handle_ = cuvis_il.p_int_value(pHandle);
         }
     }
@@ -129,7 +138,10 @@ namespace cuvis_net
         {
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);
-            cuvis_il.cuvis_async_capture_free(pHandle);
+            if (!General.IsShutDown)
+            {
+                cuvis_il.cuvis_async_capture_free(pHandle);
+            }
             handle_ = cuvis_il.p_int_value(pHandle);
         }
 
@@ -176,8 +188,60 @@ namespace cuvis_net
         Dark = cuvis_reference_type_t.Reference_Dark,
         WhiteDark = cuvis_reference_type_t.Reference_WhiteDark,
         SpRad = cuvis_reference_type_t.Reference_SpRad,
-        Distance = cuvis_reference_type_t.Reference_Distance
+        Distance = cuvis_reference_type_t.Reference_Distance,
+        WhiteSpectrum = cuvis_reference_type_t.Reference_WhiteSpectrum,
+        TargetSpectrum = cuvis_reference_type_t.Reference_TargetSpectrum
     };
+
+    public class TargetSpectrum
+    {
+        public TargetSpectrum(float[] wavelengths, float[] values)
+        {
+            Spectrum.Validate(wavelengths, values.Length);
+            Wavelengths = wavelengths;
+            Values = values;
+        }
+
+        // nanometers
+        public float[] Wavelengths { get; }
+
+        // reflectance as fractions, 1.0 is 100 percent
+        public float[] Values { get; }
+    }
+
+    public class WhiteSpectrum
+    {
+        public WhiteSpectrum(float[] wavelengths, ushort[] counts, int effectiveBitDepth, double integrationTime = 0.0)
+        {
+            Spectrum.Validate(wavelengths, counts.Length);
+            Wavelengths = wavelengths;
+            Counts = counts;
+            EffectiveBitDepth = effectiveBitDepth;
+            IntegrationTime = integrationTime;
+        }
+
+        // nanometers
+        public float[] Wavelengths { get; }
+
+        public ushort[] Counts { get; }
+
+        // significant bits per count, 1 to 16; counts are meaningless without it
+        public int EffectiveBitDepth { get; }
+
+        // milliseconds
+        public double IntegrationTime { get; }
+    }
+
+    internal static class Spectrum
+    {
+        internal static void Validate(float[] wavelengths, int valueCount)
+        {
+            if (wavelengths.Length == 0 || wavelengths.Length != valueCount)
+            {
+                throw new ArgumentException("A spectrum needs equally many wavelengths and values, and at least one of each.");
+            }
+        }
+    }
 
     public enum SessionItemType
     {

@@ -23,7 +23,10 @@ namespace cuvis_net
 
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);
-            cuvis_il.cuvis_exporter_free(pHandle);
+            if (!General.IsShutDown)
+            {
+                cuvis_il.cuvis_exporter_free(pHandle);
+            }
 
             disposed = true;
         }

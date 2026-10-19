@@ -8,6 +8,7 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_data_type_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_operation_mode_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_hardware_state_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_double.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_float.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_p_q_const__char_int__void.cs
 #${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_f_p_q_const__wchar_t_int__void.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_cuvis_status_t.cs
@@ -24,7 +25,8 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_int.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_unsigned_char.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_unsigned_int.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_unsigned_long_long.cs
-#${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_void.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_unsigned_short.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/SWIGTYPE_p_void.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_il.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_ilPINVOKE.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_component_info_t.cs
@@ -68,6 +70,12 @@ ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_worker_settings_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_worker_state_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_session_item_type_t.cs
 ${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_session_merge_mode_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_capabilities_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_sensor_spectrum_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_target_spectrum_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_cuda_mem_view_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_cuda_imbuffer_t.cs
+${CMAKE_BINARY_DIR}/intermediate/cuvis_csil/cuvis_cuda_ipc_descriptor_t.cs
 )
 
 
@@ -98,9 +106,6 @@ set_target_properties(${target_name}
 	LINKER_LANGUAGE CSharp
 	#PROPERTY VS_DOTNET_REFERENCES "System"
 )
-# Note: Modification of compiler flags is required for CLR compatibility now that we are using .resx files.
-string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-string(REPLACE "/RTC1" "" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 
 
 set_target_properties(${target_name} PROPERTIES FOLDER "${projprefix}/dotnet")

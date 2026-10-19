@@ -369,14 +369,17 @@ namespace cuvis_net
                 //
             }
 
-            ResetWorkerCallback();
+            if (!General.IsShutDown)
+            {
+                ResetWorkerCallback();
 
-            var pHandle = cuvis_il.new_p_int();
-            cuvis_il.cuvis_worker_stop(handle_);
-            cuvis_il.cuvis_worker_drop_all_queued(handle_);
-            cuvis_il.p_int_assign(pHandle, handle_);
-            cuvis_il.cuvis_worker_free(pHandle);
-            handle_ = cuvis_il.p_int_value(pHandle);
+                var pHandle = cuvis_il.new_p_int();
+                cuvis_il.cuvis_worker_stop(handle_);
+                cuvis_il.cuvis_worker_drop_all_queued(handle_);
+                cuvis_il.p_int_assign(pHandle, handle_);
+                cuvis_il.cuvis_worker_free(pHandle);
+                handle_ = cuvis_il.p_int_value(pHandle);
+            }
 
             disposed = true;
         }

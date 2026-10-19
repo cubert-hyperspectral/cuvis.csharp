@@ -91,9 +91,87 @@ namespace cuvis_net
 
         public void SetReference(Measurement mesu, ReferenceType referenceType)
         {
+            RequireMeasurementSlot(referenceType);
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_set_reference(handle_, mesu.handle_, (cuvis_reference_type_t)referenceType))
             {
                 throw new SDK_Exception();
+            }
+        }
+
+        public void SetReference(TargetSpectrum spectrum)
+        {
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_set_reference_target_spectrum_swig(handle_, spectrum.Wavelengths, spectrum.Values, spectrum.Wavelengths.Length))
+            {
+                throw new SDK_Exception();
+            }
+        }
+
+        // Replaces a White reference measurement; the two white sources clear each other.
+        public void SetReference(WhiteSpectrum spectrum)
+        {
+            if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_set_reference_white_spectrum_swig(handle_, spectrum.Wavelengths, spectrum.Counts, spectrum.Wavelengths.Length, spectrum.EffectiveBitDepth, spectrum.IntegrationTime))
+            {
+                throw new SDK_Exception();
+            }
+        }
+
+        // The shims only copy when the buffers fit the stored count, so read until they do: the first
+        // pass learns the count, a further one only happens if the slot changed in between.
+
+        // null when the slot is empty
+        public TargetSpectrum GetTargetSpectrum()
+        {
+            float[] wavelengths, values;
+            int count = 0;
+            do
+            {
+                wavelengths = new float[count];
+                values = new float[count];
+                if (!SpectrumAvailable(cuvis_il.cuvis_proc_cont_get_reference_target_spectrum_swig(handle_, wavelengths, values, count, out count)))
+                {
+                    return null;
+                }
+            } while (count != wavelengths.Length);
+            return new TargetSpectrum(wavelengths, values);
+        }
+
+        // null when the slot is empty
+        public WhiteSpectrum GetWhiteSpectrum()
+        {
+            float[] wavelengths;
+            ushort[] counts;
+            int count = 0, effectiveBitDepth;
+            double integrationTime;
+            do
+            {
+                wavelengths = new float[count];
+                counts = new ushort[count];
+                if (!SpectrumAvailable(cuvis_il.cuvis_proc_cont_get_reference_white_spectrum_swig(handle_, wavelengths, counts, count, out count, out effectiveBitDepth, out integrationTime)))
+                {
+                    return null;
+                }
+            } while (count != wavelengths.Length);
+            return new WhiteSpectrum(wavelengths, counts, effectiveBitDepth, integrationTime);
+        }
+
+        private static bool SpectrumAvailable(cuvis_status_t status)
+        {
+            if (status == cuvis_status_t.status_not_available)
+            {
+                return false;
+            }
+            if (status != cuvis_status_t.status_ok)
+            {
+                throw new SDK_Exception();
+            }
+            return true;
+        }
+
+        private static void RequireMeasurementSlot(ReferenceType referenceType)
+        {
+            if (referenceType == ReferenceType.WhiteSpectrum || referenceType == ReferenceType.TargetSpectrum)
+            {
+                throw new ArgumentException($"{referenceType} holds a spectrum, not a measurement; use SetReference/Get{referenceType} with a {referenceType}.");
             }
         }
 
@@ -107,6 +185,7 @@ namespace cuvis_net
 
         public Measurement GetReference(ReferenceType referenceType)
         {
+            RequireMeasurementSlot(referenceType);
             var pHandle = cuvis_il.new_p_int();
             if (cuvis_status_t.status_ok != cuvis_il.cuvis_proc_cont_get_reference(handle_, pHandle, (cuvis_reference_type_t)referenceType))
             {
@@ -158,7 +237,10 @@ namespace cuvis_net
 
             var pHandle = cuvis_il.new_p_int();
             cuvis_il.p_int_assign(pHandle, handle_);
-            cuvis_il.cuvis_proc_cont_free(pHandle);
+            if (!General.IsShutDown)
+            {
+                cuvis_il.cuvis_proc_cont_free(pHandle);
+            }
             handle_ = cuvis_il.p_int_value(pHandle);
 
             disposed = true;

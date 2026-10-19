@@ -66,6 +66,8 @@ source application development by a diverse group of contributors.
 Cubert GmbH aims for creating an open, inclusive, and positive community.
 Feel free to branch/fork this repository for later merge requests, open 
 issues or point us to your application specific projects.
+Before opening a pull request, please read [CONTRIBUTING.md](CONTRIBUTING.md); it covers the branch 
+model and how the shared cuvis.swig submodule is updated.
 Contact us, if you want your open source project to be included and shared 
 on this hub; either if you search for direct support, collaborators or any 
 other input or simply want your project being used by this community.
